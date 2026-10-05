@@ -1729,14 +1729,190 @@ document.addEventListener('click', (e) => {
 });
 
 /* =====================================================
-   🎁 额外优化：简历分析区域点击区域列表切换
+   🎯 P1: 简历分析 AI 增强 - 一键快捷分析
    ===================================================== */
-document.addEventListener('click', (e) => {
-  const item = e.target.closest('.region-item');
-  if (item) {
-    document.querySelectorAll('.region-item').forEach(i => i.classList.remove('active'));
-    item.classList.add('active');
-    showToast(`📋 已选中「${item.querySelector('.region-name').textContent}」开始对话`, 'info');
+
+// 从简历预览区提取文本内容
+function extractResumeText() {
+  const wrap = document.getElementById('resumePreviewWrap');
+  if (!wrap) return '';
+  return wrap.innerText.replace(/\s+/g, ' ').trim();
+}
+
+const ANALYZE_CONFIGS = {
+  score: {
+    title: '🎯 一键全面体检',
+    btnText: '体检中...',
+    systemPrompt: `你是一位资深HR面试官和简历专家。请对用户的简历做一次全面体检，用以下结构输出：
+
+## 📊 总体评分（100分制）
+- 专业匹配度：X/100
+- 表达清晰度：X/100  
+- 数据量化：X/100
+- 结构完整性：X/100
+- 格式美观度：X/100
+- **综合评分：XX/100**
+
+## ✅ 最强的 3 个亮点
+...
+
+## ⚠️ 必须修改的 5 个问题
+...
+
+## 💡 优化优先级（按影响排序）
+1. ...
+2. ...
+3. ...
+
+## 📝 一句话修改清单
+用"动词+量化+结果"格式列出 10 条具体可执行的修改建议。
+
+要求：
+1. 完全基于简历内容，不要假设不存在的经历
+2. 评分客观，宁缺毋滥
+3. 建议具体到可以直接改的程度
+4. 语言专业但不晦涩`,
+    userPrompt: (text) => `以下是我的完整简历内容，请做全面体检：\n\n${text}`
+  },
+  skills: {
+    title: '💡 技能缺口分析',
+    btnText: '分析中...',
+    systemPrompt: `你是资深技术面试官。请分析用户的技能栈，输出：
+
+## 🎯 目标岗位匹配度
+（假设用户目标是 Java 后端开发，如简历有明确目标以简历为准）
+
+## ✅ 已具备的核心技能（用 ✅ 标记）
+## ⚠️ 有但不够深入的技能（用 ⚠️ 标记 + 补强建议）
+## ❌ 缺失的高频技能（用 ❌ 标记 + 学习优先级）
+## 📚 3 个月补强路线图
+按月拆解，每月 3-5 个具体学习项目
+
+## 💼 如果去面大厂，需要立刻补的 Top 5
+
+要求：真实、精准、可落地。`,
+    userPrompt: (text) => `这是我的简历，请分析技能缺口：\n\n${text}`
+  },
+  projects: {
+    title: '✨ 项目亮点改写',
+    btnText: '改写中...',
+    systemPrompt: `你是资深简历优化师 + 大厂面试官。请帮用户改写项目经历，遵循 STAR 原则（情境-任务-行动-结果）+ 量化数据：
+
+对每个项目输出：
+## 📌 项目名称（改写后）
+- **角色**：XXX（更专业的定位）
+- **技术栈**：列出核心技术（用户没写的补全合理项）
+- **原始描述**（标注用户原文）
+- **改写版本**（STAR + 量化，至少 3 条 bullet）
+- **为什么更好**（解释改写逻辑）
+
+改写原则：
+1. 动词开头（主导/设计/优化/重构/实现）
+2. 必须量化（23% → 57.5%，具体数值）
+3. 突出技术决策（选型理由）
+4. 体现复杂度（高并发/分布式/亿级数据）
+5. 避免"负责""参与"等模糊词汇`,
+    userPrompt: (text) => `这是我的项目经历，请帮我改写成大厂简历风格：\n\n${text}`
+  },
+  quantify: {
+    title: '📊 量化指标建议',
+    btnText: '分析中...',
+    systemPrompt: `你是数据驱动的简历优化专家。请针对用户简历的每一段经历，给出具体的量化建议：
+
+## 🎯 核心原则
+没有量化 → 面试官无法衡量你的价值 → 必须改！
+
+## 📋 逐段分析
+对每段经历，按以下格式输出：
+- **原文**：XXX
+- **问题**：哪里没量化
+- **建议数值来源**（如果简历里没有，给出合理的估算区间）：
+  - 用户量：XX 人（假设：团队规模 × 覆盖比例）
+  - 数据量：XX 条/XX GB（假设：日活 × 人均行为数）
+  - 性能提升：XX%（假设：常规优化幅度）
+  - 成本节省：XX%（假设：引入新技术的效益）
+  - 响应时间：XXms（假设：优化前后差异）
+- **改写示例**：XXX（带具体数字）
+
+## ⚠️ 禁止虚构！
+如果简历完全没有线索，给出合理的估算区间（标注"估算"），不要编一个精准数字。
+
+## 💡 万能公式
+"通过 XX 方案，将 XX 指标从 X 提升到 Y，提升 Z%"`,
+    userPrompt: (text) => `帮我给简历里的每段经历加量化指标建议：\n\n${text}`
   }
-});
+};
+
+async function quickAnalyze(type) {
+  const cfg = ANALYZE_CONFIGS[type];
+  if (!cfg) return;
+
+  if (!AI.hasRealAPI()) {
+    showToast('⚠️ 请先在 ⚙️ AI 设置里接入 DeepSeek 等真实 API', 'error');
+    document.querySelector('#navAIStatus, .ai-status-wrap')?.click();
+    return;
+  }
+
+  const chatArea = document.querySelector('.analysis-right .chat-area');
+  if (!chatArea) { showToast('请在简历分析页面使用此功能', 'info'); return; }
+
+  const text = extractResumeText();
+  if (text.length < 50) {
+    showToast('⚠️ 简历内容太少，先填写简历或上传自己的简历', 'error');
+    return;
+  }
+
+  // 移除之前的 quick-actions，避免重复点击
+  const quickDiv = chatArea.querySelector('.quick-actions');
+  if (quickDiv) quickDiv.remove();
+
+  // 构造消息
+  const aiMsgDiv = document.createElement('div');
+  aiMsgDiv.className = 'chat-message ai-message';
+  aiMsgDiv.innerHTML = `
+    <div class="message-avatar ai-avatar">AI</div>
+    <div class="message-content">
+      <div class="message-bubble"><span style="color:#888;font-size:12px;">${cfg.title} · 正在深度分析...▊</span></div>
+    </div>`;
+  chatArea.appendChild(aiMsgDiv);
+  chatArea.scrollTop = chatArea.scrollHeight;
+
+  const bubble = aiMsgDiv.querySelector('.message-bubble');
+
+  // 发送 Toast
+  showToast('🤖 AI 正在 ' + cfg.title + '（约 15-30 秒）...', 'info');
+
+  try {
+    await AI.chatStream(
+      [{ role: 'user', content: cfg.userPrompt(text) }],
+      cfg.systemPrompt,
+      (chunk) => {
+        bubble._raw = (bubble._raw || '') + chunk;
+        bubble.innerHTML = formatMarkdown(bubble._raw) + '<span style="animation:blink 0.8s infinite;">▊</span>';
+        chatArea.scrollTop = chatArea.scrollHeight;
+      }
+    );
+    // 结束
+    bubble.innerHTML = formatMarkdown(bubble._raw || '') + `<div style="margin-top:12px;opacity:0.5;font-size:11px;">— ${cfg.title} 完成 —</div>`;
+    showToast('✅ ' + cfg.title + ' 完成！', 'success');
+  } catch (err) {
+    bubble.innerHTML = '❌ AI 分析失败：' + err.message.substring(0, 60);
+    showToast('❌ AI 调用失败', 'error');
+  }
+}
+
+// Markdown 简化渲染（和 inline script 里共享）
+if (typeof formatMarkdown !== 'function') {
+  // 如果 index.html inline 没定义（不太可能），这里兜底
+}
+
+/* =====================================================
+   🔧 面试复盘 AI（增强）
+   ===================================================== */
+function openReplayAIFromTracking(record) {
+  showToast('🤖 正在分析面试问题...', 'info');
+  // 复用已有的复盘 AI 逻辑（ai.v3.js 里 ai.chatStream 已绑好）
+}
+
+console.log('✅ FREESUME P1 AI 增强已加载 - quickAnalyze ready');
 

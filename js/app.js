@@ -1,4 +1,4 @@
-/**
+﻿/**
  * FREESUME · 简历工作台
  * 主应用逻辑
  */
@@ -25,6 +25,19 @@ function showView(viewName) {
   
   // 更新URL hash
   history.replaceState(null, '', '#' + viewName);
+
+  // 切换到模板库时重新渲染
+  if (viewName === 'templates') {
+    setTimeout(() => renderTemplates(), 50);
+  }
+  // 切换到大厂直达时重新渲染
+  if (viewName === 'companies') {
+    setTimeout(() => renderCompanies(), 50);
+  }
+  // 切换到投递记录时渲染统计
+  if (viewName === 'tracking') {
+    setTimeout(() => renderTrackingStats(), 100);
+  }
 }
 
 // 绑定导航点击事件
@@ -1006,7 +1019,7 @@ function applyTemplateAction() {
   if (!t) { showToast('请先选择一个模板', 'error'); return; }
   showToast(`✨ 模板「${t.name}」已应用！`, 'success');
   closeTemplatePreview();
-  setTimeout(() => { switchView('analysis'); }, 500);
+  setTimeout(() => { showView('analysis'); }, 500);
 }
 
 // 兼容旧函数名
@@ -1125,7 +1138,7 @@ function applyImportedResume() {
     if (!d) { showToast('没有可应用的数据', 'error'); return; }
     showToast('✨ 已根据上传文件更新简历！', 'success');
     closeResumeImport();
-    setTimeout(() => { switchView('analysis'); }, 500);
+    setTimeout(() => { showView('analysis'); }, 500);
   } catch (e) {
     showToast('❌ 应用失败：' + e.message, 'error');
   }
@@ -1519,15 +1532,6 @@ document.addEventListener('DOMContentLoaded', () => {
   renderTrackingStats();
 });
 
-// 切换到 tracking 视图时重新渲染
-const originalShowView = showView;
-showView = function(viewName) {
-  originalShowView(viewName);
-  if (viewName === 'tracking') {
-    setTimeout(renderTrackingStats, 100);
-  }
-};
-
 /* =====================================================
    🔧 岗位匹配：生成按钮修复（卡住问题）
    ===================================================== */
@@ -1584,3 +1588,4 @@ document.addEventListener('click', (e) => {
     showToast(`📋 已选中「${item.querySelector('.region-name').textContent}」开始对话`, 'info');
   }
 });
+

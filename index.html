@@ -1,0 +1,1084 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FREESUME · 简历工作台</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <!-- 顶部导航 -->
+  <header class="top-nav">
+    <div class="nav-left">
+      <div class="logo">
+        <span class="logo-icon">📄</span>
+        <span class="logo-text">FREESUME</span>
+      </div>
+      <span class="nav-tag">让简历自己说话</span>
+    </div>
+    <nav class="nav-center">
+      <a href="#" class="nav-link active" data-view="home">首页</a>
+      <a href="#" class="nav-link" data-view="analysis">简历分析</a>
+      <a href="#" class="nav-link" data-view="matching">岗位匹配</a>
+      <a href="#" class="nav-link" data-view="companies">大厂直达</a>
+      <a href="#" class="nav-link" data-view="tracking">投递记录</a>
+    </nav>
+    <div class="nav-right">
+      <div class="nav-ai-status" id="navAIStatus" onclick="openAISettings()" title="点击配置AI">
+        <span class="ai-dot"></span>
+        <span id="aiStatusText">AI: Mock</span>
+      </div>
+      <button class="btn-icon" onclick="openAISettings()" title="AI设置">⚙️</button>
+      <div class="user-info">
+        <div class="avatar">李</div>
+        <span class="username">李大斌</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- 主内容区 -->
+  <main class="main-content">
+
+    <!-- 首页视图 -->
+    <section class="view view-home active" id="view-home">
+      <!-- Hero区域 -->
+      <div class="hero-section">
+        <div class="hero-content">
+          <div class="hero-badge">🏆 TRAE AI创造力大赛 Top 20</div>
+          <h1 class="hero-title">让简历自己说话<br/><span class="gradient-text">看见真实的自己</span></h1>
+          <p class="hero-desc">AI驱动的简历工作台 · 近100万关注 · 让你解放双手</p>
+          <div class="hero-actions">
+            <button class="btn btn-primary" onclick="showView('analysis')">
+              <span>开始分析简历</span>
+              <span class="btn-arrow">→</span>
+            </button>
+            <button class="btn btn-secondary" onclick="showView('onboarding')">新手引导</button>
+          </div>
+        </div>
+        <div class="hero-visual">
+          <div class="visual-card">
+            <div class="card-header">
+              <span class="card-title">简历智能分析</span>
+              <span class="card-badge">AI</span>
+            </div>
+            <div class="card-body">
+              <div class="score-ring">
+                <svg viewBox="0 0 100 100">
+                  <circle cx="50" cy="50" r="42" fill="none" stroke="#eef0f5" stroke-width="8"/>
+                  <circle cx="50" cy="50" r="42" fill="none" stroke="url(#scoreGrad)" stroke-width="8" stroke-linecap="round" stroke-dasharray="264" stroke-dashoffset="53" transform="rotate(-90 50 50)"/>
+                  <defs>
+                    <linearGradient id="scoreGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stop-color="#667eea"/>
+                      <stop offset="100%" stop-color="#764ba2"/>
+                    </linearGradient>
+                  </defs>
+                </svg>
+                <span class="score-value">80</span>
+              </div>
+              <div class="score-labels">
+                <div class="score-item"><span class="dot dot-blue"></span>个人信息 92</div>
+                <div class="score-item"><span class="dot dot-green"></span>教育背景 78</div>
+                <div class="score-item"><span class="dot dot-orange"></span>项目经历 65</div>
+                <div class="score-item"><span class="dot dot-purple"></span>专业技能 88</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 功能卡片 -->
+      <div class="features-section">
+        <h2 class="section-title">核心功能</h2>
+        <div class="features-grid">
+          <div class="feature-card" onclick="showView('analysis')">
+            <div class="feature-icon">🔍</div>
+            <h3>简历智能分析</h3>
+            <p>AI多维度深度分析简历，针对每个区域给出专业改进建议，支持语音输入实时对话</p>
+            <div class="feature-stats">
+              <span class="stat">5+ 维度分析</span>
+              <span class="stat">实时对话</span>
+            </div>
+          </div>
+          <div class="feature-card" onclick="showView('matching')">
+            <div class="feature-icon">🎯</div>
+            <h3>岗位智能匹配</h3>
+            <p>一键生成与岗位JD完美匹配的简历，完全保留原样式，让你解放双手</p>
+            <div class="feature-stats">
+              <span class="stat">精准匹配</span>
+              <span class="stat">保留样式</span>
+            </div>
+          </div>
+          <div class="feature-card" onclick="showView('companies')">
+            <div class="feature-icon">🏢</div>
+            <h3>大厂直达</h3>
+            <p>200+ 知名公司官网一键直达，互联网大厂、传统大厂、电子设备全覆盖</p>
+            <div class="feature-stats">
+              <span class="stat">200+ 公司</span>
+              <span class="stat">直接跳转</span>
+            </div>
+          </div>
+          <div class="feature-card" onclick="showView('tracking')">
+            <div class="feature-icon">📊</div>
+            <h3>投递全流程管理</h3>
+            <p>从意向到投递到面试，全流程追踪记录，复盘笔记让你每次面试都有进步</p>
+            <div class="feature-stats">
+              <span class="stat">状态追踪</span>
+              <span class="stat">复盘笔记</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 数据统计 -->
+      <div class="stats-section">
+        <div class="stat-card">
+          <div class="stat-number">88.8<span class="stat-unit">万</span></div>
+          <div class="stat-label">累计访问量</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">8.86<span class="stat-unit">万</span></div>
+          <div class="stat-label">收藏数</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">37.01<span class="stat-unit">%</span></div>
+          <div class="stat-label">点赞率</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">1233</div>
+          <div class="stat-label">粉丝关注</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 新手引导视图 -->
+    <section class="view view-onboarding" id="view-onboarding">
+      <div class="onboarding-container">
+        <div class="onboarding-left">
+          <div class="onboarding-illustration">
+            <svg viewBox="0 0 200 200" class="thinking-svg">
+              <circle cx="100" cy="70" r="40" fill="#f0f0f5"/>
+              <circle cx="90" cy="65" r="3" fill="#333"/>
+              <circle cx="110" cy="65" r="3" fill="#333"/>
+              <path d="M88 80 Q100 88 112 80" stroke="#333" stroke-width="2" fill="none" stroke-linecap="round"/>
+              <path d="M70 120 Q100 100 130 120 L130 180 L70 180 Z" fill="#e8e8ef"/>
+              <!-- 装饰元素 -->
+              <circle cx="30" cy="40" r="8" fill="#ffd93d" opacity="0.6"/>
+              <path d="M160 30 L170 20 L180 30 L170 40 Z" fill="#6bcb77" opacity="0.6"/>
+              <circle cx="40" cy="170" r="6" fill="#ff6b6b" opacity="0.5"/>
+            </svg>
+          </div>
+          <h2 class="onboarding-title">看见真实的自己</h2>
+          <p class="onboarding-desc">经历之外，还有你的性格与方向</p>
+        </div>
+
+        <div class="onboarding-right">
+          <!-- 步骤指示器 -->
+          <div class="steps-indicator">
+            <div class="step active" data-step="1">01</div>
+            <div class="step-line active"></div>
+            <div class="step active" data-step="2">02</div>
+            <div class="step-line active"></div>
+            <div class="step active" data-step="3">03</div>
+            <div class="step-line active"></div>
+            <div class="step active" data-step="4">04</div>
+            <div class="step-line"></div>
+            <div class="step" data-step="5">05</div>
+          </div>
+
+          <!-- 步骤内容 -->
+          <div class="step-content">
+            <div class="step-header">
+              <div class="step-tabs">
+                <button class="step-tab active">基础信息</button>
+                <button class="step-tab">性格与方向</button>
+                <button class="step-tab">软性信息</button>
+                <button class="step-tab">职位偏好</button>
+                <button class="step-tab">生成简历</button>
+              </div>
+              <button class="step-save">保存进度</button>
+            </div>
+
+            <div class="step-body">
+              <h3 class="step-title">软性信息</h3>
+              <p class="step-subtitle">补充你的性格、职业愿景与技能标签，让简历更有温度。</p>
+
+              <div class="form-group">
+                <label>性格特点</label>
+                <input type="text" class="form-input" placeholder="如：沉稳细致、善于沟通、自驱力强" value="沉稳细致、善于沟通、自驱力强" />
+              </div>
+
+              <div class="form-group">
+                <label>职业愿景</label>
+                <input type="text" class="form-input" placeholder="如：希望在3年内成长为能独立负责模块的后端工程师" value="希望在3年内成长为能独立负责模块的后端工程师" />
+              </div>
+
+              <div class="form-group">
+                <label>不感兴趣的方向</label>
+                <input type="text" class="form-input" placeholder="如：纯销售岗、频繁出差、创业公司" />
+              </div>
+
+              <div class="form-group">
+                <label>技能标签</label>
+                <div class="tag-input">
+                  <span class="tag">Java</span>
+                  <span class="tag">Spring Boot</span>
+                  <span class="tag">MySQL</span>
+                  <span class="tag">Redis</span>
+                  <span class="tag">分布式</span>
+                  <input type="text" class="tag-input-inner" placeholder="输入后回车添加" />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <div class="textarea-header">
+                  <label>自我评价</label>
+                  <button class="btn-ai-generate">✨ AI生成</button>
+                </div>
+                <textarea class="form-textarea" rows="4" placeholder="一段真诚的自我评价，或点上方让AI生成">在过往的项目中，我始终保持对技术的热情与严谨态度。善于从系统整体架构思考问题，注重代码质量与可维护性。具备良好的团队协作能力，能够与产品、测试紧密配合，推动项目高质量交付。</textarea>
+              </div>
+
+              <div class="step-actions">
+                <button class="btn btn-outline" onclick="showView('home')">← 上一步</button>
+                <button class="btn btn-primary" onclick="showView('analysis')">下一步 →</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 简历分析视图 -->
+    <section class="view view-analysis" id="view-analysis">
+      <div class="analysis-layout">
+        <!-- 左栏：简历预览 -->
+        <div class="analysis-left">
+          <div class="panel-header">
+            <button class="tab-btn active">简历预览</button>
+            <button class="tab-btn">AI分析</button>
+          </div>
+
+          <div class="resume-preview">
+            <!-- 个人信息区域（蓝色高亮） -->
+            <div class="resume-section section-personal">
+              <span class="section-label">个人信息</span>
+              <h2 class="resume-name">张意明</h2>
+              <div class="resume-contact">
+                <span>📱 19975760</span>
+                <span>✉️ 201113747@qq.com</span>
+                <span>📍 浙江杭州</span>
+              </div>
+              <div class="resume-meta">
+                <span>2005-12-09</span>
+                <span class="divider">|</span>
+                <span>中国</span>
+              </div>
+            </div>
+
+            <!-- 教育背景区域（绿色高亮） -->
+            <div class="resume-section section-education">
+              <span class="section-label">教育背景</span>
+              <div class="edu-item">
+                <div class="edu-header">
+                  <strong>南昌航空大学</strong>
+                  <span class="edu-date">2023-09 ~ 2027-06</span>
+                </div>
+                <div class="edu-detail">软件工程 · 本科</div>
+                <div class="edu-detail">江西南昌</div>
+              </div>
+            </div>
+
+            <!-- 项目经历区域（橙色高亮） -->
+            <div class="resume-section section-project">
+              <span class="section-label">项目经历</span>
+              <div class="project-item">
+                <div class="project-header">
+                  <strong>K203 传统棋牌游戏管理系统（校企合作）</strong>
+                  <span class="project-role">项目负责人</span>
+                </div>
+                <div class="project-date">2024-09 ~ 2024-12</div>
+                <ul class="project-desc">
+                  <li>作为项目负责人，主导各地各级联调协议的超精化设计，保障系统高可用与数据一致性，负责后端包括MAVCT层选型与改造，实际业务代码全部经过STL API。实现多设备间数据同步持久化，以及MySQL高并发事务处理。</li>
+                  <li>负责数据库的性能与安全优化，建立多套高并发测试场景，查询效率提升23%。</li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- 专业技能区域（紫色高亮） -->
+            <div class="resume-section section-skill">
+              <span class="section-label">专业技能</span>
+              <div class="skill-tags">
+                <span class="skill-tag">Java</span>
+                <span class="skill-tag">Spring Boot</span>
+                <span class="skill-tag">MySQL</span>
+                <span class="skill-tag">Redis</span>
+                <span class="skill-tag">分布式</span>
+              </div>
+            </div>
+
+            <!-- 自我评价区域（粉色高亮） -->
+            <div class="resume-section section-selfeval">
+              <span class="section-label">自我评价</span>
+              <p>对后端充满热情，愿意持续保持学习。待人真诚，做事严谨细致。具备良好的团队合作精神，能够快速融入新环境。</p>
+            </div>
+          </div>
+
+          <div class="resume-score-bar">
+            <span>📋 个人信息 92</span>
+            <span class="dot dot-blue"></span>
+            <span>🎓 教育背景 78</span>
+            <span class="dot dot-green"></span>
+            <span>💼 项目经历 65</span>
+            <span class="dot dot-orange"></span>
+            <span>⚡ 专业技能 88</span>
+            <span class="dot dot-purple"></span>
+            <span>✨ 自我评价 75</span>
+            <span class="dot dot-pink"></span>
+          </div>
+        </div>
+
+        <!-- 中栏：区域列表 -->
+        <div class="analysis-center">
+          <div class="panel-header">
+            <span class="panel-title">区域列表</span>
+            <span class="panel-desc">从左侧选择一个区域开始对话</span>
+          </div>
+
+          <div class="region-list">
+            <div class="region-item active">
+              <span class="region-dot dot-blue"></span>
+              <span class="region-name">个人信息</span>
+              <span class="region-score">92</span>
+            </div>
+            <div class="region-item">
+              <span class="region-dot dot-green"></span>
+              <span class="region-name">教育背景</span>
+              <span class="region-score">78</span>
+            </div>
+            <div class="region-item">
+              <span class="region-dot dot-orange"></span>
+              <span class="region-name">项目经历</span>
+              <span class="region-score">65</span>
+            </div>
+            <div class="region-item">
+              <span class="region-dot dot-purple"></span>
+              <span class="region-name">专业技能</span>
+              <span class="region-score">88</span>
+            </div>
+            <div class="region-item">
+              <span class="region-dot dot-pink"></span>
+              <span class="region-name">自我评价</span>
+              <span class="region-score">75</span>
+            </div>
+          </div>
+
+          <div class="region-tip">
+            <div class="tip-icon">💡</div>
+            <p>AI会针对你选择的区域，生成专业的分析与改进建议。每个区域独立对话，进度可随时回看。</p>
+          </div>
+        </div>
+
+        <!-- 右栏：区域对话 -->
+        <div class="analysis-right">
+          <div class="panel-header">
+            <span class="panel-title">🔍 项目经历</span>
+            <button class="voice-btn">🎙️ 语音输入</button>
+          </div>
+
+          <div class="chat-area">
+            <!-- AI分析消息 -->
+            <div class="chat-message ai-message">
+              <div class="message-avatar ai-avatar">AI</div>
+              <div class="message-content">
+                <div class="message-bubble">
+                  针对你的项目经历区域，我有以下发现：
+                </div>
+
+                <div class="analysis-block">
+                  <h4 class="analysis-title">一、项目与JD的契合度</h4>
+                  <p>你的项目 <strong>传统棋牌游戏管理系统</strong> 虽然使用了 Spring，这正好呼应，但 JD 的关键词是 <strong>"高并发"</strong>。建议你在项目描述中更突出 <strong>性能优化</strong> 和 <strong>分布式架构</strong> 相关的亮点。</p>
+                </div>
+
+                <div class="analysis-block">
+                  <h4 class="analysis-title">二、一个关键提醒</h4>
+                  <p>你的项目描述偏 <strong>"实施"</strong> 而非 <strong>"设计"</strong>，建议每个 bullet point 可以增加量化数据，例如：</p>
+                  <ul class="suggestions-list">
+                    <li>查询效率提升了多少百分比？</li>
+                    <li>处理过的最大并发量是多少？</li>
+                    <li>这个项目最有挑战的技术点是什么？</li>
+                  </ul>
+                </div>
+
+                <div class="analysis-block highlight">
+                  <h4 class="analysis-title">三、你可以这样改</h4>
+                  <p>把下面这段加入你的第一条 bullet point：</p>
+                  <div class="suggestion-text">
+                    "主导后端MAVCT层架构选型与改造，基于 Spring Boot + Redis 实现高并发数据处理引擎，查询效率提升约 23%。"
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 快捷操作 -->
+            <div class="quick-actions">
+              <button class="quick-btn">📋 一键复制建议</button>
+              <button class="quick-btn">🔄 重新生成分析</button>
+              <button class="quick-btn">💡 还有哪些可优化的？</button>
+            </div>
+          </div>
+
+          <!-- 输入区 -->
+          <div class="chat-input-area">
+            <div class="input-tools">
+              <button class="tool-btn">🎙️ 语音</button>
+              <button class="tool-btn">📎 附件</button>
+            </div>
+            <textarea class="chat-input" placeholder="输入想修改的方向，自动生成简历修改方案..." rows="1"></textarea>
+            <button class="send-btn">发送</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 岗位匹配视图 -->
+    <section class="view view-matching" id="view-matching">
+      <div class="matching-layout">
+        <!-- 左栏：JD适配预览 -->
+        <div class="matching-left">
+          <div class="panel-header">
+            <span class="panel-title">JD适配预览（只读）</span>
+          </div>
+
+          <div class="jd-preview">
+            <div class="jd-header">
+              <h3>字节 - Java后端开发</h3>
+              <div class="jd-tags">
+                <span class="jd-tag">19975760</span>
+                <span class="jd-tag">201113747@qq.com</span>
+              </div>
+            </div>
+            <div class="jd-info">
+              <div class="jd-item"><span>性别</span>男</div>
+              <div class="jd-item"><span>学历</span>本科</div>
+              <div class="jd-item"><span>学校</span>南昌航空大学</div>
+              <div class="jd-item"><span>专业</span>软件工程</div>
+              <div class="jd-item"><span>电话</span>19975760</div>
+            </div>
+            <div class="jd-body">
+              <h4>📁 项目经历 (2)</h4>
+              <div class="jd-project">
+                <div class="jd-project-header">
+                  <strong>K203 传统棋牌游戏管理系统（校企合作）</strong>
+                  <span class="jd-project-date">2024-09 ~ 2024-12</span>
+                </div>
+                <ul class="jd-project-desc">
+                  <li>主导后端MAVCT层架构选型与改造，基于 Spring Boot + Redis 实现高并发数据处理引擎...</li>
+                  <li>负责数据库的性能与安全优化，查询效率提升23%。</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 中栏：匹配历史 -->
+        <div class="matching-center">
+          <div class="panel-header">
+            <span class="panel-title">📋 匹配历史</span>
+            <button class="btn btn-small btn-primary">+ 新建匹配</button>
+          </div>
+
+          <div class="match-history">
+            <div class="match-item active">
+              <div class="match-company">
+                <span class="match-dot dot-blue"></span>
+                <strong>字节 - 开发</strong>
+              </div>
+              <div class="match-meta">2026/1/4 10:14</div>
+              <div class="match-score">
+                <span class="score-badge high">匹配度 88</span>
+              </div>
+            </div>
+            <div class="match-item">
+              <div class="match-company">
+                <span class="match-dot dot-green"></span>
+                <strong>新石 - 开发</strong>
+              </div>
+              <div class="match-meta">2026/1/2 10:00</div>
+              <div class="match-score"><span class="score-badge">80</span></div>
+            </div>
+            <div class="match-item">
+              <div class="match-company">
+                <span class="match-dot dot-orange"></span>
+                <strong>新石 - 前端</strong>
+              </div>
+              <div class="match-meta">2025/12/31 15:23</div>
+              <div class="match-score"><span class="score-badge">88</span></div>
+            </div>
+            <div class="match-item">
+              <div class="match-company">
+                <span class="match-dot dot-purple"></span>
+                <strong>新石 - 后端</strong>
+              </div>
+              <div class="match-meta">2025/12/28 16:45</div>
+              <div class="match-score"><span class="score-badge">88</span></div>
+            </div>
+            <div class="match-item">
+              <div class="match-company">
+                <span class="match-dot dot-pink"></span>
+                <strong>小红书 - 后端</strong>
+              </div>
+              <div class="match-meta">2025/12/27 22:19</div>
+              <div class="match-score"><span class="score-badge">88</span></div>
+            </div>
+            <div class="match-item">
+              <div class="match-company">
+                <span class="match-dot dot-blue"></span>
+                <strong>理想 - 后端</strong>
+              </div>
+              <div class="match-meta">2025/12/25 22:42</div>
+              <div class="match-score"><span class="score-badge">88</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 右栏：AI生成的匹配简历 -->
+        <div class="matching-right">
+          <div class="panel-header">
+            <span class="panel-title">🎯 字节 - 开发</span>
+            <div class="panel-tabs">
+              <button class="panel-tab active">匹配度 88</button>
+              <button class="panel-tab">生成简历</button>
+              <button class="panel-tab">查看详情</button>
+            </div>
+          </div>
+
+          <div class="match-content">
+            <div class="generation-progress">
+              <div class="progress-header">
+                <span>🔄 正在生成简历中...</span>
+              </div>
+              <div class="progress-steps">
+                <div class="progress-step done">
+                  <span class="step-icon">✓</span>
+                  <span>分析JD需求</span>
+                </div>
+                <div class="progress-step done">
+                  <span class="step-icon">✓</span>
+                  <span>匹配简历内容</span>
+                </div>
+                <div class="progress-step done">
+                  <span class="step-icon">✓</span>
+                  <span>重写简历描述</span>
+                </div>
+                <div class="progress-step active">
+                  <span class="step-icon">4</span>
+                  <span>生成预览</span>
+                </div>
+                <div class="progress-step">
+                  <span class="step-icon">5</span>
+                  <span>完成生成</span>
+                </div>
+              </div>
+              <div class="progress-bar">
+                <div class="progress-fill" style="width: 80%"></div>
+              </div>
+              <div class="progress-hint">✨ 正在生成匹配区域简历...</div>
+            </div>
+
+            <div class="ai-generated-content">
+              <h4 class="gen-title">📝 针对JD的定制简历建议</h4>
+
+              <div class="gen-section">
+                <h5 class="gen-section-title">🎯 技能匹配亮点</h5>
+                <p>字节的核心业务处理高连接、高QPS、低延迟的海量数据，以抖音为例，用户每秒会产生大量行为数据（点赞、关注、浏览），这些数据需要实时写入和分析。你的简历应该突出你的 Redis、MySQL、分布式相关经验。</p>
+              </div>
+
+              <div class="gen-section">
+                <h5 class="gen-section-title">💡 项目描述优化建议</h5>
+                <p>你提到的 <strong>传统棋牌游戏管理系统</strong> 项目，虽然业务场景不同，但其中的技术栈（Spring Boot + Redis + MySQL + 高并发优化）非常贴合字节的后端技术栈。建议在描述中更突出性能优化和分布式能力。</p>
+              </div>
+
+              <div class="gen-section highlight">
+                <h5 class="gen-section-title">🔑 关键亮点改写建议</h5>
+                <div class="suggestion-box">
+                  <p><strong>原描述：</strong> 负责数据库的性能与安全优化，查询效率提升23%。</p>
+                  <p><strong>改写建议：</strong> 主导数据库架构优化，通过 Redis 缓存策略 + MySQL 分库分表方案，将核心查询接口响应时间从 <strong>200ms 降至 85ms</strong>，查询效率提升 <strong>57.5%</strong>。</p>
+                </div>
+              </div>
+
+              <div class="gen-section">
+                <h5 class="gen-section-title">❓ 你还有这些优势可以突出</h5>
+                <ul class="gen-list">
+                  <li>✅ 完整的 Java 技术栈（Spring Boot + Redis + MySQL + 分布式）</li>
+                  <li>✅ 独立负责项目，有完整的从设计到交付经验</li>
+                  <li>✅ 对后端架构优化有实际项目经验</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="matching-actions">
+            <button class="btn btn-outline">停止生成</button>
+            <button class="btn btn-primary">✨ 一键生成完整简历</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 大厂直达视图 -->
+    <section class="view view-companies" id="view-companies">
+      <div class="companies-header">
+        <div class="company-tabs">
+          <button class="company-tab active">大厂公司</button>
+          <button class="company-tab">校园信息</button>
+          <button class="company-tab">岗位网申</button>
+          <button class="company-tab">投递记录</button>
+        </div>
+        <button class="btn btn-primary">+ 收藏</button>
+      </div>
+
+      <div class="search-bar">
+        <input type="text" class="search-input" placeholder="搜索公司名或关键词" />
+        <div class="filter-chips">
+          <span class="chip active">全部 250</span>
+          <span class="chip">互联网大厂 75</span>
+          <span class="chip">传统大厂 20</span>
+          <span class="chip">电子设备 6</span>
+          <span class="chip">能源电力 22</span>
+          <span class="chip">建筑工程 15</span>
+          <span class="chip">航天航空 15</span>
+          <span class="chip">国有大型·股份制银行 20</span>
+          <span class="chip">保险金融头部 10</span>
+          <span class="chip">汽车制造 18</span>
+        </div>
+      </div>
+
+      <div class="company-groups">
+        <div class="company-group">
+          <div class="group-header">
+            <div class="group-icon">🌐</div>
+            <div class="group-info">
+              <h3>互联网大厂</h3>
+              <span class="group-count">总共互联网大厂 · 75 家</span>
+            </div>
+            <span class="group-badge">75 家</span>
+          </div>
+          <div class="company-grid">
+            <a href="#" class="company-card" target="_blank">
+              <div class="company-logo tx">🐧</div>
+              <div class="company-name">腾讯</div>
+            </a>
+            <a href="#" class="company-card">
+              <div class="company-logo al">🌙</div>
+              <div class="company-name">阿里巴巴</div>
+            </a>
+            <a href="#" class="company-card">
+              <div class="company-logo bd">🎵</div>
+              <div class="company-name">字节跳动</div>
+            </a>
+            <a href="#" class="company-card">
+              <div class="company-logo mt">🥣</div>
+              <div class="company-name">美团</div>
+            </a>
+            <a href="#" class="company-card">
+              <div class="company-logo ba">🔍</div>
+              <div class="company-name">百度</div>
+            </a>
+            <a href="#" class="company-card">
+              <div class="company-logo wb">🎬</div>
+              <div class="company-name">网易</div>
+            </a>
+            <a href="#" class="company-card">
+              <div class="company-logo jd">📦</div>
+              <div class="company-name">京东</div>
+            </a>
+            <a href="#" class="company-card">
+              <div class="company-logo me">🤖</div>
+              <div class="company-name">美团</div>
+            </a>
+            <a href="#" class="company-card">
+              <div class="company-logo dy">🛒</div>
+              <div class="company-name">滴滴出行</div>
+            </a>
+            <a href="#" class="company-card">
+              <div class="company-logo mi">📱</div>
+              <div class="company-name">小米集团</div>
+            </a>
+            <a href="#" class="company-card">
+              <div class="company-logo ks">🎬</div>
+              <div class="company-name">快手</div>
+            </a>
+            <a href="#" class="company-card">
+              <div class="company-logo sp">🛒</div>
+              <div class="company-name">拼多多</div>
+            </a>
+            <a href="#" class="company-card">
+              <div class="company-logo xhs">📕</div>
+              <div class="company-name">小红书</div>
+            </a>
+            <a href="#" class="company-card">
+              <div class="company-logo by">🎮</div>
+              <div class="company-name">B站</div>
+            </a>
+            <a href="#" class="company-card">
+              <div class="company-logo zh">❓</div>
+              <div class="company-name">知乎</div>
+            </a>
+          </div>
+        </div>
+
+        <div class="company-group">
+          <div class="group-header">
+            <div class="group-icon">🏭</div>
+            <div class="group-info">
+              <h3>传统大厂</h3>
+              <span class="group-count">总共传统大厂 · 20 家</span>
+            </div>
+            <span class="group-badge">20 家</span>
+          </div>
+          <div class="company-grid">
+            <a href="#" class="company-card"><div class="company-logo">🔧</div><div class="company-name">华为</div></a>
+            <a href="#" class="company-card"><div class="company-logo">🏦</div><div class="company-name">招商银行</div></a>
+            <a href="#" class="company-card"><div class="company-logo">🚗</div><div class="company-name">比亚迪</div></a>
+            <a href="#" class="company-card"><div class="company-logo">🚄</div><div class="company-name">中国中车</div></a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 投递记录视图 -->
+    <section class="view view-tracking" id="view-tracking">
+      <div class="tracking-header">
+        <div class="tracking-tabs" id="trackingTabs">
+          <button class="tracking-tab active" data-status="全部">全部 <span class="count" id="countAll">0</span></button>
+          <button class="tracking-tab" data-status="意向">意向 <span class="count" id="countIntent">0</span></button>
+          <button class="tracking-tab" data-status="已投递">已投递 <span class="count" id="countApplied">0</span></button>
+          <button class="tracking-tab" data-status="笔试中">笔试中 <span class="count" id="countWritten">0</span></button>
+          <button class="tracking-tab" data-status="面试中">面试中 <span class="count" id="countInterview">0</span></button>
+          <button class="tracking-tab" data-status="已通过">已通过 <span class="count" id="countPassed">0</span></button>
+          <button class="tracking-tab" data-status="已淘汰">已淘汰 <span class="count" id="countRejected">0</span></button>
+        </div>
+        <div class="tracking-actions">
+          <button class="btn btn-outline" onclick="Tracking.exportData()">📥 导出</button>
+          <button class="btn btn-primary" onclick="Tracking.openEditModal()">+ 新建记录</button>
+        </div>
+      </div>
+
+      <div class="tracking-stats" id="trackingStats">
+        <!-- JS动态渲染 -->
+      </div>
+
+      <div class="tracking-table">
+        <div class="table-header">
+          <div class="col col-company">公司</div>
+          <div class="col col-position">岗位</div>
+          <div class="col col-status">状态</div>
+          <div class="col col-date">投递日期</div>
+          <div class="col col-action">操作</div>
+        </div>
+
+        <div class="table-body" id="trackingTableBody">
+          <!-- JS动态渲染 -->
+        </div>
+      </div>
+
+      <!-- 复盘弹窗 -->
+      <div class="modal-overlay" id="replayModal">
+        <div class="modal">
+          <div class="modal-header">
+            <h3>📝 新建复盘笔记</h3>
+            <button class="modal-close" onclick="closeReplayModal()">✕</button>
+          </div>
+          <div class="modal-body">
+            <div class="form-row">
+              <div class="form-group">
+                <label>类型</label>
+                <select class="form-select">
+                  <option>面试复盘</option>
+                  <option>笔试复盘</option>
+                  <option>网申复盘</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>时间</label>
+                <input type="datetime-local" class="form-input" value="2026-01-13T22:15" />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>标题</label>
+              <input type="text" class="form-input" placeholder="如：字节二面复盘" value="字节二面复盘" />
+            </div>
+
+            <div class="form-group">
+              <label>关键问题</label>
+              <textarea class="form-textarea" rows="3" placeholder="记录面试官问的关键问题">Redis 缓存穿透、击穿、雪崩的区别和解决方案？Spring 事务传播机制有哪些？如何保证分布式系统的一致性？</textarea>
+            </div>
+
+            <div class="form-group">
+              <div class="textarea-header">
+                <label>复盘内容</label>
+                <button class="btn-ai-generate">✨ AI分析</button>
+              </div>
+              <textarea class="form-textarea" rows="5" placeholder="记录面试问题、自我评估、改进点">面试整体感觉还不错，但分布式事务部分回答不够深入。下次要重点准备 Saga 和 TCC 的具体实现案例。</textarea>
+            </div>
+
+            <div class="form-group tag-generation">
+              <label>标签</label>
+              <div class="tag-input">
+                <span class="tag tag-ai">AI生成</span>
+                <input type="text" class="tag-input-inner" />
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-outline" onclick="closeReplayModal()">取消</button>
+            <button class="btn btn-primary" onclick="Tracking.saveReplay()">保存</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 新建/编辑记录弹窗 -->
+      <div class="modal-overlay" id="editRecordModal">
+        <div class="modal">
+          <div class="modal-header">
+            <h3 id="editRecordTitle">➕ 新建投递记录</h3>
+            <button class="modal-close" onclick="Tracking.closeEditModal()">✕</button>
+          </div>
+          <div class="modal-body">
+            <input type="hidden" id="editRecordId" />
+            <div class="form-row">
+              <div class="form-group">
+                <label>公司名称 *</label>
+                <input type="text" class="form-input" id="editCompany" placeholder="如：字节跳动" />
+              </div>
+              <div class="form-group">
+                <label>岗位名称 *</label>
+                <input type="text" class="form-input" id="editPosition" placeholder="如：Java后端开发（实习）" />
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>当前状态 *</label>
+                <select class="form-select" id="editStatus">
+                  <option value="意向">💡 意向</option>
+                  <option value="已投递">📤 已投递</option>
+                  <option value="笔试中">📝 笔试中</option>
+                  <option value="面试中">🎤 面试中</option>
+                  <option value="已通过">✅ 已通过</option>
+                  <option value="已淘汰">❌ 已淘汰</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>投递日期</label>
+                <input type="date" class="form-input" id="editDate" />
+              </div>
+            </div>
+            <div class="form-group">
+              <label>备注</label>
+              <textarea class="form-textarea" id="editNote" rows="3" placeholder="记录一些备注信息，比如JD亮点、内推人、公司官网等"></textarea>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-outline" onclick="Tracking.closeEditModal()">取消</button>
+            <button class="btn btn-primary" onclick="Tracking.saveRecord()">保存</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 状态快速切换弹窗 -->
+      <div class="modal-overlay" id="statusModal">
+        <div class="modal" style="max-width: 400px;">
+          <div class="modal-header">
+            <h3>🔄 更新状态</h3>
+            <button class="modal-close" onclick="Tracking.closeStatusModal()">✕</button>
+          </div>
+          <div class="modal-body">
+            <p style="margin-bottom: 16px; color: var(--text-secondary);">选择要更新到的状态：</p>
+            <div class="status-grid">
+              <button class="status-option" onclick="Tracking.setStatus('意向')">💡 意向</button>
+              <button class="status-option" onclick="Tracking.setStatus('已投递')">📤 已投递</button>
+              <button class="status-option" onclick="Tracking.setStatus('笔试中')">📝 笔试中</button>
+              <button class="status-option" onclick="Tracking.setStatus('面试中')">🎤 面试中</button>
+              <button class="status-option" onclick="Tracking.setStatus('已通过')">✅ 已通过</button>
+              <button class="status-option danger" onclick="Tracking.setStatus('已淘汰')">❌ 已淘汰</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 详情弹窗 -->
+      <div class="modal-overlay" id="detailModal">
+        <div class="modal">
+          <div class="modal-header">
+            <h3 id="detailTitle">📋 投递详情</h3>
+            <button class="modal-close" onclick="Tracking.closeDetailModal()">✕</button>
+          </div>
+          <div class="modal-body" id="detailBody">
+            <!-- JS动态渲染 -->
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-outline" onclick="Tracking.closeDetailModal()">关闭</button>
+            <button class="btn btn-primary" onclick="Tracking.openEditFromDetail()">✏️ 编辑</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Toast 通知 -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <script src="js/ai.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    // ====== 简历分析AI对话 ======
+    document.addEventListener('DOMContentLoaded', () => {
+      AI.init();
+      updateAIStatus();
+      
+      // 监听导航切换时更新状态
+      setInterval(updateAIStatus, 5000);
+      
+      // 简历分析对话发送
+      const chatInput = document.querySelector('.chat-input');
+      const sendBtn = document.querySelector('.chat-input-area .send-btn');
+      if (chatInput && sendBtn) {
+        async function sendChat() {
+          const text = chatInput.value.trim();
+          if (!text) return;
+          
+          // 添加用户消息
+          appendChatMessage('user', text);
+          chatInput.value = '';
+          chatInput.style.height = 'auto';
+          
+          // 显示加载中
+          appendChatMessage('loading', 'AI 分析中...');
+          
+          // 调用AI
+          const response = await AI.chat(
+            [{ role: 'user', content: text }],
+            '简历分析助手。请针对用户的问题，从简历优化、技术深度、项目展示等角度给出专业建议。用Markdown格式输出，结构清晰。'
+          );
+          
+          // 移除loading，添加AI回复
+          const loadingEl = document.querySelector('.chat-message.loading');
+          if (loadingEl) loadingEl.remove();
+          appendChatMessage('ai', response);
+        }
+        
+        sendBtn.addEventListener('click', sendChat);
+        chatInput.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            sendChat();
+          }
+        });
+      }
+      
+      // AI生成自我评价按钮
+      document.querySelectorAll('.btn-ai-generate').forEach(btn => {
+        btn.removeEventListener('click', btn._aiHandler);
+        btn._aiHandler = async function() {
+          const textarea = this.closest('.form-group')?.querySelector('.form-textarea');
+          const contextInput = this.closest('.step-body, .modal-body')?.querySelector('.form-input');
+          const context = contextInput?.value || '';
+          
+          showToast('AI 正在生成...', 'info');
+          
+          const response = await AI.chat(
+            [{ role: 'user', content: context }],
+            '请根据用户提供的经历，生成一段真诚、自然的自我评价（300-400字）。突出技术热情、学习能力、团队协作和解决问题的能力。'
+          );
+          
+          if (textarea) textarea.value = response;
+          showToast('✅ AI 已生成内容', 'success');
+        };
+        btn.addEventListener('click', btn._aiHandler);
+      });
+      
+      // 复盘AI分析按钮
+      const replayAiBtn = document.querySelector('#replayModal .btn-ai-generate');
+      if (replayAiBtn) {
+        replayAiBtn.addEventListener('click', async function() {
+          const questionsTextarea = document.querySelectorAll('#replayModal .form-textarea')[0];
+          const contentTextarea = document.querySelectorAll('#replayModal .form-textarea')[1];
+          const questions = questionsTextarea?.value || '';
+          
+          if (!questions) { showToast('请先填写关键问题', 'error'); return; }
+          
+          showToast('AI 正在分析面试问题...', 'info');
+          
+          const response = await AI.chat(
+            [{ role: 'user', content: `面试问题：\n${questions}\n\n请帮我分析这些问题考察的知识点，并给出改进建议。` }],
+            '面试复盘助手。用户提供了面试中被问到的问题，请分析：1. 每个问题考察的知识点 2. 回答中的不足 3. 下次改进建议'
+          );
+          
+          if (contentTextarea) contentTextarea.value = response;
+          showToast('✅ AI 分析完成', 'success');
+        });
+      }
+    });
+    
+    function updateAIStatus() {
+      const text = document.getElementById('aiStatusText');
+      const dot = document.querySelector('#navAIStatus .ai-dot');
+      if (!text || !dot) return;
+      
+      if (AI.hasRealAPI()) {
+        text.textContent = 'AI: 在线';
+        dot.style.background = '#00b894';
+        dot.style.boxShadow = '0 0 8px #00b894';
+      } else {
+        text.textContent = 'AI: Mock';
+        dot.style.background = '#fdcb6e';
+        dot.style.boxShadow = 'none';
+      }
+    }
+    
+    function appendChatMessage(role, content) {
+      const chatArea = document.querySelector('.chat-area');
+      if (!chatArea) return;
+      
+      // 移除之前的quick-actions
+      const quickActions = chatArea.querySelector('.quick-actions');
+      if (quickActions) quickActions.remove();
+      
+      const msgDiv = document.createElement('div');
+      msgDiv.className = 'chat-message ' + role;
+      
+      const avatarClass = role === 'user' ? 'user-avatar' : 'ai-avatar';
+      const avatarText = role === 'user' ? '我' : 'AI';
+      
+      msgDiv.innerHTML = `
+        <div class="message-avatar ${avatarClass}">${avatarText}</div>
+        <div class="message-content">
+          <div class="message-bubble" style="${role === 'user' ? 'background:rgba(232,97,58,0.1);color:var(--primary-dark);' : ''}">${formatMarkdown(content)}</div>
+          ${role === 'ai' ? `
+            <div class="quick-actions">
+              <button class="quick-btn" onclick="copyToClipboard(\`${content.replace(/`/g, '\\`').replace(/\\/g, '\\\\')}\`)">📋 复制</button>
+              <button class="quick-btn" onclick="this.closest('.chat-message').remove(); showToast('已删除', 'info')">🗑️</button>
+            </div>` : ''}
+        </div>
+      `;
+      
+      chatArea.appendChild(msgDiv);
+      chatArea.scrollTop = chatArea.scrollHeight;
+    }
+    
+    // 简单的Markdown格式化
+    function formatMarkdown(text) {
+      if (typeof text !== 'string') return text;
+      return text
+        .replace(/### (.+)/g, '<h4 style="font-size:14px;font-weight:600;margin:12px 0 8px;color:var(--text-primary);">$1</h4>')
+        .replace(/## (.+)/g, '<h3 style="font-size:15px;font-weight:600;margin:16px 0 10px;color:var(--text-primary);">$1</h3>')
+        .replace(/\*\*(.+?)\*\*/g, '<strong style="color:var(--text-primary);">$1</strong>')
+        .replace(/\*(.+?)\*/g, '<em>$1</em>')
+        .replace(/^- (.+)$/gm, '• $1')
+        .replace(/^(\d+)\. (.+)$/gm, '$1. $2')
+        .replace(/\n/g, '<br>');
+    }
+  </script>
+</body>
+</html>

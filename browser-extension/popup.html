@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <title>FREESUME · 简历快速填充</title>
+  <link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+  <div class="popup-container">
+    <header class="popup-header">
+      <div class="logo">
+        <span class="logo-emoji">📄</span>
+        <span class="logo-name">FREESUME</span>
+      </div>
+      <div class="status-badge" id="pageStatus">检测页面中...</div>
+    </header>
+
+    <main class="popup-main">
+      <!-- 一键填充 -->
+      <section class="quick-action" id="quickActionSection">
+        <button class="btn-fill" id="fillBtn" disabled>
+          <span class="fill-icon">⚡</span>
+          <span class="fill-text">一键填充简历</span>
+        </button>
+        <p class="fill-hint" id="fillHint">请先在下方填写简历信息</p>
+      </section>
+
+      <!-- 简历信息表单 -->
+      <section class="resume-form">
+        <div class="form-header">
+          <h3>简历信息</h3>
+          <button class="btn-link" id="loadFromWeb">🗂️ 从 FREESUME 网站导入</button>
+        </div>
+
+        <div class="form-body">
+          <div class="form-item">
+            <label>姓名 *</label>
+            <input type="text" id="r_name" placeholder="张意明" />
+          </div>
+          <div class="form-row">
+            <div class="form-item">
+              <label>手机 *</label>
+              <input type="tel" id="r_phone" placeholder="19975760" />
+            </div>
+            <div class="form-item">
+              <label>邮箱 *</label>
+              <input type="email" id="r_email" placeholder="201113747@qq.com" />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-item">
+              <label>性别</label>
+              <select id="r_gender">
+                <option value="男">男</option>
+                <option value="女">女</option>
+              </select>
+            </div>
+            <div class="form-item">
+              <label>生日</label>
+              <input type="date" id="r_birthday" />
+            </div>
+          </div>
+          <div class="form-item">
+            <label>现居城市</label>
+            <input type="text" id="r_city" placeholder="浙江杭州" />
+          </div>
+          <div class="form-row">
+            <div class="form-item">
+              <label>学校</label>
+              <input type="text" id="r_school" placeholder="南昌航空大学" />
+            </div>
+            <div class="form-item">
+              <label>专业</label>
+              <input type="text" id="r_major" placeholder="软件工程" />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-item">
+              <label>学历</label>
+              <select id="r_education">
+                <option value="本科">本科</option>
+                <option value="硕士">硕士</option>
+                <option value="博士">博士</option>
+                <option value="大专">大专</option>
+                <option value="高中">高中</option>
+              </select>
+            </div>
+            <div class="form-item">
+              <label>毕业年份</label>
+              <input type="number" id="r_gradYear" placeholder="2027" min="2010" max="2040" />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 操作按钮 -->
+      <section class="form-actions">
+        <button class="btn-save" id="saveBtn">💾 保存信息</button>
+        <button class="btn-clear" id="clearBtn">🗑️ 清空</button>
+      </section>
+    </main>
+
+    <footer class="popup-footer">
+      <a href="http://localhost:8080" target="_blank">打开 FREESUME 工作台</a>
+      <span class="divider">·</span>
+      <span class="version">v1.0.0</span>
+    </footer>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

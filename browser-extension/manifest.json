@@ -1,0 +1,51 @@
+{
+  "manifest_version": 3,
+  "name": "FREESUME · 简历快速填充",
+  "version": "1.0.0",
+  "description": "一键将简历信息自动填充到各大厂网申系统，支持字节、阿里、腾讯等 200+ 公司",
+  "permissions": ["storage", "activeTab", "scripting"],
+  "host_permissions": [
+    "*://*.bytedance.com/*",
+    "*://*.alibaba.com/*",
+    "*://*.taobao.com/*",
+    "*://*.tencent.com/*",
+    "*://*.jd.com/*",
+    "*://*.meituan.com/*",
+    "*://*.xiaomi.com/*",
+    "*://*.baidu.com/*",
+    "*://*.xhslink.com/*",
+    "*://*.netease.com/*",
+    "*://*.huawei.com/*",
+    "*://*.liepin.com/*",
+    "*://*.zhipin.com/*",
+    "*://*.51job.com/*",
+    "*://*.zhaopin.com/*",
+    "*://*.jobs.bytedance.com/*",
+    "<all_urls>"
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    },
+    "default_title": "FREESUME 简历填充"
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "css": ["content.css"],
+      "run_at": "document_idle"
+    }
+  ],
+  "background": {
+    "service_worker": "background.js"
+  }
+}

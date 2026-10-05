@@ -1,0 +1,73 @@
+/* FREESUME 插件注入页面的样式 */
+
+/* 填充成功的字段高亮 */
+.freesume-filled {
+  background: rgba(0, 184, 148, 0.08) !important;
+  border-color: #00b894 !important;
+  transition: all 0.3s ease !important;
+}
+
+.freesume-filled::after {
+  content: '✓';
+  position: absolute;
+  right: 8px;
+  color: #00b894;
+  font-weight: bold;
+}
+
+/* 浮动工具条 */
+#freesume-toolbar {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 2147483647;
+}
+
+.freesume-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  background: linear-gradient(135deg, #e8613a, #ff8c42);
+  color: white;
+  border: none;
+  border-radius: 24px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(232, 97, 58, 0.4);
+  transition: all 0.3s ease;
+}
+
+.freesume-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(232, 97, 58, 0.5);
+}
+
+.freesume-icon { font-size: 18px; }
+
+/* 页面内Toast */
+#freesume-page-toast {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%) translateY(-20px);
+  padding: 12px 24px;
+  background: #2d3436;
+  color: white;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 500;
+  z-index: 2147483647;
+  opacity: 0;
+  transition: all 0.3s ease;
+  pointer-events: none;
+}
+
+#freesume-page-toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+#freesume-page-toast.success { background: #00b894; }
+#freesume-page-toast.error { background: #e17055; }

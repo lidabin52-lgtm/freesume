@@ -1,0 +1,259 @@
+/* FREESUME 插件样式 */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  width: 380px;
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+  background: #faf8f5;
+  color: #2d3436;
+}
+
+.popup-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 500px;
+}
+
+.popup-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  background: white;
+  border-bottom: 1px solid #e8e4de;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.logo-emoji { font-size: 22px; }
+
+.logo-name {
+  font-size: 18px;
+  font-weight: 700;
+  background: linear-gradient(135deg, #e8613a, #764ba2);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.status-badge {
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  background: #f5f3ef;
+  color: #636e72;
+}
+
+.status-badge.active {
+  background: rgba(0, 184, 148, 0.15);
+  color: #00b894;
+}
+
+.popup-main {
+  flex: 1;
+  padding: 16px 20px;
+  overflow-y: auto;
+}
+
+/* 快速填充 */
+.quick-action {
+  margin-bottom: 20px;
+}
+
+.btn-fill {
+  width: 100%;
+  padding: 16px;
+  background: linear-gradient(135deg, #e8613a, #ff8c42);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: all 0.3s;
+  box-shadow: 0 4px 12px rgba(232, 97, 58, 0.3);
+}
+
+.btn-fill:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(232, 97, 58, 0.4);
+}
+
+.btn-fill:disabled {
+  background: #b2bec3;
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
+.fill-icon { font-size: 20px; }
+
+.fill-hint {
+  text-align: center;
+  font-size: 12px;
+  color: #b2bec3;
+  margin-top: 8px;
+}
+
+/* 表单 */
+.resume-form {
+  background: white;
+  border-radius: 12px;
+  border: 1px solid #e8e4de;
+  overflow: hidden;
+}
+
+.form-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  background: #f5f3ef;
+  border-bottom: 1px solid #e8e4de;
+}
+
+.form-header h3 {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.btn-link {
+  background: none;
+  border: none;
+  color: #e8613a;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.btn-link:hover { text-decoration: underline; }
+
+.form-body {
+  padding: 16px;
+}
+
+.form-item {
+  margin-bottom: 12px;
+}
+
+.form-item label {
+  display: block;
+  font-size: 12px;
+  color: #636e72;
+  margin-bottom: 4px;
+}
+
+.form-item input,
+.form-item select {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #e8e4de;
+  border-radius: 8px;
+  font-size: 13px;
+  background: #faf8f5;
+  transition: border-color 0.2s;
+}
+
+.form-item input:focus,
+.form-item select:focus {
+  outline: none;
+  border-color: #e8613a;
+  background: white;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+/* 操作按钮 */
+.form-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.btn-save {
+  flex: 1;
+  padding: 10px;
+  background: linear-gradient(135deg, #e8613a, #ff8c42);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.btn-save:hover { transform: translateY(-1px); }
+
+.btn-clear {
+  padding: 10px 14px;
+  background: white;
+  color: #636e72;
+  border: 1px solid #e8e4de;
+  border-radius: 10px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-clear:hover {
+  color: #e17055;
+  border-color: #e17055;
+}
+
+/* 底部 */
+.popup-footer {
+  padding: 12px 20px;
+  text-align: center;
+  font-size: 11px;
+  color: #b2bec3;
+  border-top: 1px solid #e8e4de;
+  background: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+}
+
+.popup-footer a {
+  color: #e8613a;
+  text-decoration: none;
+}
+
+.popup-footer a:hover { text-decoration: underline; }
+
+.divider { color: #ddd; }
+
+/* Toast */
+.toast {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  padding: 10px 20px;
+  background: #2d3436;
+  color: white;
+  border-radius: 8px;
+  font-size: 13px;
+  opacity: 0;
+  transition: all 0.3s;
+  pointer-events: none;
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.toast.success { background: #00b894; }
+.toast.error { background: #e17055; }

@@ -1144,4 +1144,182 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // 首次渲染模板
   renderTemplates();
+
+  // 渲染公司列表
+  renderCompanies();
 });
+
+/* ====== 大厂直达（真实链接）====== */
+const COMPANIES_DATA = [
+  {
+    group: '互联网大厂',
+    icon: '🌐',
+    color: '#2563eb',
+    companies: [
+      { name: '腾讯', url: 'https://join.qq.com/', logo: '🐧' },
+      { name: '阿里巴巴', url: 'https://talent.alibaba.com/', logo: '🌙' },
+      { name: '字节跳动', url: 'https://jobs.bytedance.com/', logo: '🎵' },
+      { name: '美团', url: 'https://zhaopin.meituan.com/', logo: '🥣' },
+      { name: '百度', url: 'https://talent.baidu.com/', logo: '🔍' },
+      { name: '网易', url: 'https://campus.163.com/', logo: '🎬' },
+      { name: '京东', url: 'https://zhaopin.jd.com/', logo: '📦' },
+      { name: '滴滴', url: 'https://campus.didiglobal.com/', logo: '🛒' },
+      { name: '小米', url: 'https://hr.xiaomi.com/', logo: '📱' },
+      { name: '快手', url: 'https://zhaopin.kuaishou.com/', logo: '🎬' },
+      { name: '拼多多', url: 'https://careers.pinduoduo.com/', logo: '🛒' },
+      { name: '小红书', url: 'https://job.xiaohongshu.com/', logo: '📕' },
+      { name: 'B站', url: 'https://job.bilibili.com/', logo: '📺' },
+      { name: '知乎', url: 'https://app.mokahr.com/campus_apply/zhihu/', logo: '❓' },
+      { name: '新浪', url: 'https://zhaopin.sina.com.cn/', logo: '🌊' },
+      { name: '搜狐', url: 'https://campus.sohu.com/', logo: '🦊' },
+      { name: '360', url: 'https://campus.360.cn/', logo: '🛡️' },
+      { name: '携程', url: 'https://campus.ctrip.com/', logo: '✈️' },
+      { name: '去哪儿', url: 'https://campus.qunar.com/', logo: '🧳' },
+      { name: '途牛', url: 'https://www.tuniu.com/campus/', logo: '🐂' },
+      { name: '马蜂窝', url: 'https://job.mafengwo.cn/', logo: '🐝' },
+      { name: '顺丰', url: 'https://zhaopin.sf-express.com/', logo: '📮' },
+      { name: '中通', url: 'https://zhaopin.zto.com/', logo: '📦' },
+      { name: '圆通', url: 'https://hr.yto.net.cn/', logo: '📬' },
+      { name: '韵达', url: 'https://www.yundaex.com/zhaopin/', logo: '📫' },
+      { name: '苏宁', url: 'https://zhaopin.suning.com/', logo: '🏪' },
+      { name: '国美', url: 'https://job.gome.com.cn/', logo: '🏬' },
+      { name: '唯品会', url: 'https://campus.vip.com/', logo: '💎' },
+      { name: '蘑菇街', url: 'https://campus.mogujie.com/', logo: '🍄' },
+      { name: '美丽说', url: 'https://hr.meilishuo.com/', logo: '💄' },
+      { name: '同程旅行', url: 'https://campus.ly.com/', logo: '🚗' },
+      { name: '艺龙', url: 'https://campus.elong.com/', logo: '🏨' },
+      { name: '芒果TV', url: 'https://zhaopin.mgtv.com/', logo: '🥭' },
+      { name: '爱奇艺', url: 'https://campus.iqiyi.com/', logo: '🍐' },
+      { name: '优酷', url: 'https://campus.youku.com/', logo: '🎥' },
+      { name: '腾讯视频', url: 'https://join.qq.com/', logo: '📺' },
+      { name: '芒果超媒', url: 'https://zhaopin.mgtv.com/', logo: '🎬' },
+      { name: '阅文集团', url: 'https://hr.yuewen.com/', logo: '📖' },
+      { name: '中文在线', url: 'https://www.chineseall.com/', logo: '📚' },
+      { name: '掌阅', url: 'https://www.zhangyue.com/', logo: '📱' },
+      { name: '完美世界', url: 'https://campus.wanmei.com/', logo: '🎮' },
+      { name: '网易游戏', url: 'https://campus.163.com/', logo: '🕹️' },
+      { name: '腾讯游戏', url: 'https://join.qq.com/', logo: '🎯' },
+      { name: '米哈游', url: 'https://jobs.mihoyo.com/', logo: '🎐' },
+      { name: '莉莉丝', url: 'https://www.lilith.com/', logo: '🌙' },
+      { name: '叠纸游戏', url: 'https://zhaopin.papegames.com/', logo: '💝' },
+      { name: '库洛游戏', url: 'https://www.kurogames.com/', logo: '🎨' },
+      { name: '鹰角网络', url: 'https://www.hypergryph.com/', logo: '🦅' },
+      { name: '散爆网络', url: 'https://www.sunborn.com/', logo: '💥' },
+      { name: '朝夕光年', url: 'https://www.bytegravity.com/', logo: '☀️' },
+      { name: '祖龙娱乐', url: 'https://www.zulong.com/', logo: '🐉' },
+      { name: '西山居', url: 'https://www.xishanju.com/', logo: '⚔️' },
+      { name: '畅游', url: 'https://www.changyou.com/', logo: '🏊' },
+      { name: '盛大', url: 'https://www.snda.com/', logo: '🎪' },
+      { name: '金山软件', url: 'https://campus.kingsoft.com/', logo: '⛰️' },
+      { name: '金山世游', url: 'https://www.kingsoftgame.com/', logo: '🎮' },
+      { name: '巨人网络', url: 'https://www.gaiaonline.com/', logo: '🧌' },
+      { name: '昆仑万维', url: 'https://www.kunlun.com/', logo: '🌏' },
+      { name: '三七互娱', url: 'https://www.37.com/', logo: '🎲' },
+      { name: '游族网络', url: 'https://www.youzu.com/', logo: '🎭' },
+      { name: '恺英网络', url: 'https://www.kaiying.com/', logo: '🏆' },
+      { name: '天神娱乐', url: 'https://www.tianshanyule.com/', logo: '👑' },
+      { name: '中手游', url: 'https://www.cmge.com/', logo: '📱' },
+      { name: '创梦天地', url: 'https://www.idreamsky.com/', logo: '🌟' },
+      { name: '盛趣游戏', url: 'https://www.shengqugames.com/', logo: '🎡' },
+      { name: '波克城市', url: 'https://www.bokcc.com/', logo: '🛶' },
+      { name: '边锋网络', url: 'https://www.gamewave.net/', logo: '🃏' },
+      { name: '上海莉莉丝', url: 'https://www.lilith.com/', logo: '🌸' },
+      { name: '广州四三九九', url: 'https://www.4399.com/', logo: '🎯' },
+      { name: '深圳第七大道', url: 'https://www.d7road.com/', logo: '🛣️' },
+      { name: '成都梦工厂', url: 'https://www.dreamworksgames.com/', logo: '🏭' },
+      { name: '杭州电魂', url: 'https://www.dianhun.cn/', logo: '⚡' },
+      { name: '苏州蜗牛', url: 'https://www.snailgames.com.cn/', logo: '🐌' },
+      { name: '武汉世纪华通', url: 'https://www.centuryhuatong.com/', logo: '🏭' },
+      { name: '广州多益网络', url: 'https://www.duoyi.com/', logo: '🎯' },
+      { name: '深圳中青宝', url: 'https://www.zqgame.com/', logo: '🏹' },
+      { name: '北京光宇', url: 'https://www.guangyu.com/', logo: '🔆' },
+      { name: '福州网龙', url: 'https://www.netdragon.com/', logo: '🐉' }
+    ]
+  },
+  {
+    group: '传统大厂',
+    icon: '🏭',
+    color: '#059669',
+    companies: [
+      { name: '华为', url: 'https://career.huawei.com/', logo: '🔧' },
+      { name: '招商银行', url: 'https://career.cmbchina.com/', logo: '🏦' },
+      { name: '比亚迪', url: 'https://job.byd.com/', logo: '🚗' },
+      { name: '中国中车', url: 'https://zhaopin.crrcgc.cc/', logo: '🚄' },
+      { name: '中国工商银行', url: 'https://job.icbc.com.cn/', logo: '💰' },
+      { name: '中国建设银行', url: 'https://job.ccb.com/', logo: '🏛️' },
+      { name: '中国农业银行', url: 'https://job.abchina.com/', logo: '🌾' },
+      { name: '中国银行', url: 'https://campus.chinabank.com.cn/', logo: '🏮' },
+      { name: '交通银行', url: 'https://job.bocom.cn/', logo: '🏦' },
+      { name: '中国石油', url: 'https://zhaopin.cnpc.com.cn/', logo: '🛢️' },
+      { name: '中国石化', url: 'https://zhaopin.sinopec.com/', logo: '⛽' },
+      { name: '国家电网', url: 'https://zhaopin.sgcc.com.cn/', logo: '⚡' },
+      { name: '中国电信', url: 'https://zhaopin.chinatelecom.com.cn/', logo: '📡' },
+      { name: '中国移动', url: 'https://zhaopin.10086.cn/', logo: '📱' },
+      { name: '中国联通', url: 'https://zhaopin.chinaunicom.com.cn/', logo: '📶' },
+      { name: '海尔', url: 'https://career.haier.com/', logo: '❄️' },
+      { name: '格力', url: 'https://zhaopin.gree.com/', logo: '🌬️' },
+      { name: '美的', url: 'https://career.midea.com/', logo: '🌀' },
+      { name: 'TCL', url: 'https://zhaopin.tcl.com/', logo: '📺' },
+      { name: '长虹', url: 'https://zhaopin.changhong.com/', logo: '📡' }
+    ]
+  },
+  {
+    group: '金融科技',
+    icon: '💳',
+    color: '#dc2626',
+    companies: [
+      { name: '蚂蚁集团', url: 'https://talent.antgroup.com/', logo: '🐜' },
+      { name: '陆金所', url: 'https://www.lufax.com/', logo: '💰' },
+      { name: '众安在线', url: 'https://www.zhongan.com/', logo: '🛡️' },
+      { name: '360数科', url: 'https://www.360shuke.com/', logo: '🔢' },
+      { name: '乐信', url: 'https://www.lexin.com/', logo: '🎵' },
+      { name: '微众银行', url: 'https://webank.com/', logo: '🤝' },
+      { name: '网商银行', url: 'https://www.mybank.cn/', logo: '🏪' },
+      { name: '新网银行', url: 'https://www.xwbank.com/', logo: '🌐' },
+      { name: '苏宁银行', url: 'https://www.suningbank.com/', logo: '🏦' },
+      { name: '小米消费金融', url: 'https://www.mixiaojin.com/', logo: '📱' }
+    ]
+  },
+  {
+    group: '人工智能',
+    icon: '🤖',
+    color: '#7c3aed',
+    companies: [
+      { name: '百度智能云', url: 'https://cloud.baidu.com/', logo: '🔍' },
+      { name: '阿里云智能', url: 'https://www.aliyun.com/', logo: '☁️' },
+      { name: '腾讯云', url: 'https://cloud.tencent.com/', logo: '🐧' },
+      { name: '华为云', url: 'https://www.huaweicloud.com/', logo: '🔧' },
+      { name: '科大讯飞', url: 'https://zhaopin.iflytek.com/', logo: '🗣️' },
+      { name: '商汤科技', url: 'https://www.sensetime.com/', logo: '👁️' },
+      { name: '旷视科技', url: 'https://www.megvii.com/', logo: '📷' },
+      { name: '依图科技', url: 'https://www.yitu.cn/', logo: '🗺️' },
+      { name: '云从科技', url: 'https://www.cloudwalk.com/', logo: '☁️' },
+      { name: '地平线', url: 'https://www.horizon.ai/', logo: '🌅' }
+    ]
+  }
+];
+
+function renderCompanies() {
+  const container = document.getElementById('companyGroups');
+  if (!container) return;
+  container.innerHTML = COMPANIES_DATA.map(g => `
+    <div class="company-group">
+      <div class="group-header">
+        <div class="group-icon">${g.icon}</div>
+        <div class="group-info">
+          <h3>${g.group}</h3>
+          <span class="group-count">${g.companies.length} 家公司 · 点击跳转官网</span>
+        </div>
+        <span class="group-badge">${g.companies.length}</span>
+      </div>
+      <div class="company-grid">
+        ${g.companies.map(c => `
+          <a href="${c.url}" class="company-card" target="_blank" rel="noopener" title="前往 ${c.name} 官网">
+            <div class="company-logo">${c.logo}</div>
+            <div class="company-name">${c.name}</div>
+          </a>
+        `).join('')}
+      </div>
+    </div>
+  `).join('');
+}

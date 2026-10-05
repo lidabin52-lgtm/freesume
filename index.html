@@ -973,8 +973,6 @@
           </div>
         </div>
       </div>
-    </section>
-
     <!-- 模板库视图 -->
     <section class="view view-templates" id="view-templates">
       <div class="templates-header">
@@ -1000,12 +998,12 @@
         <div class="modal" style="max-width:800px;">
           <div class="modal-header">
             <h3 id="templatePreviewTitle">模板预览</h3>
-            <button class="modal-close" onclick="document.getElementById('templatePreviewModal').remove()">✕</button>
+            <button class="modal-close" onclick="closeTemplatePreview()">✕</button>
           </div>
           <div class="modal-body" id="templatePreviewBody" style="max-height:60vh;overflow-y:auto;"></div>
           <div class="modal-footer">
-            <button class="btn btn-outline" onclick="document.getElementById('templatePreviewModal').remove()">关闭</button>
-            <button class="btn btn-primary" id="templateApplyBtn" onclick="applyTemplate()">✨ 应用此模板到我的简历</button>
+            <button class="btn btn-outline" onclick="closeTemplatePreview()">关闭</button>
+            <button class="btn btn-primary" id="templateApplyBtn" onclick="applyTemplateAction()">✨ 应用此模板到我的简历</button>
           </div>
         </div>
       </div>
@@ -1017,7 +1015,7 @@
     <div class="modal" style="max-width:560px;">
       <div class="modal-header">
         <h3>📤 导入我的简历</h3>
-        <button class="modal-close" onclick="document.getElementById('resumeImportModal').remove()">✕</button>
+        <button class="modal-close" onclick="closeResumeImport()">✕</button>
       </div>
       <div class="modal-body">
         <div class="resume-dropzone" id="resumeDropzone">
@@ -1034,7 +1032,7 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button class="btn btn-outline" onclick="document.getElementById('resumeImportModal').remove()">取消</button>
+        <button class="btn btn-outline" onclick="closeResumeImport()">取消</button>
       </div>
     </div>
   </div>

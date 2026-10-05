@@ -976,25 +976,33 @@ function previewTemplate(id) {
   const t = RESUME_TEMPLATES.find(x => x.id === id);
   if (!t) return;
   const modal = document.getElementById('templatePreviewModal');
-  if (!modal) {
-    // 动态创建
-    alert('请先刷新页面');
-    return;
-  }
+  if (!modal) { return; }
   document.getElementById('templatePreviewTitle').textContent = `${t.name} · 预览`;
   document.getElementById('templatePreviewBody').innerHTML = t.render(t);
-  document.getElementById('templateApplyBtn').onclick = () => applyTemplate(t);
-  modal.classList.add('active');
   modal.style.display = 'flex';
+  modal.classList.add('active');
+  // 保存当前模板到全局
+  window.__currentTpl = t;
 }
 
-function applyTemplate(t) {
-  showToast(`✨ 模板「${t.name}」已应用到当前简历！`, 'success');
-  setTimeout(() => {
-    document.getElementById('templatePreviewModal').remove();
-    switchView('analysis');
-  }, 800);
+function closeTemplatePreview() {
+  const modal = document.getElementById('templatePreviewModal');
+  if (modal) {
+    modal.style.display = 'none';
+    modal.classList.remove('active');
+  }
 }
+
+function applyTemplateAction() {
+  const t = window.__currentTpl;
+  if (!t) { showToast('请先选择一个模板', 'error'); return; }
+  showToast(`✨ 模板「${t.name}」已应用！`, 'success');
+  closeTemplatePreview();
+  setTimeout(() => { switchView('analysis'); }, 500);
+}
+
+// 兼容旧函数名
+function applyTemplate(t) { applyTemplateAction(); }
 
 // ====== 模板筛选 ======
 document.addEventListener('click', (e) => {
@@ -1008,8 +1016,17 @@ document.addEventListener('click', (e) => {
 // ====== 简历导入 ======
 function openResumeImport() {
   const modal = document.getElementById('resumeImportModal');
-  if (!modal) { alert('刷新页面后再试'); return; }
+  if (!modal) { return; }
   modal.style.display = 'flex';
+  modal.classList.add('active');
+}
+
+function closeResumeImport() {
+  const modal = document.getElementById('resumeImportModal');
+  if (modal) {
+    modal.style.display = 'none';
+    modal.classList.remove('active');
+  }
 }
 
 function handleResumeFile(event) {
@@ -1085,19 +1102,22 @@ function parseResumeContent(text, ext, fileName) {
   html += `💡 技能：<strong>${result.skills.length ? result.skills.join(' · ') : '未识别'}</strong><br/>`;
   html += `</div>`;
   if (foundCount >= 2) {
-    html += `<button class="btn btn-primary" onclick="applyImportedResume(${JSON.stringify(JSON.stringify(result))})" style="margin-top:10px;">📝 应用到我的简历</button>`;
+    html += `<button class="btn btn-primary" onclick="applyImportedResume()" style="margin-top:10px;">📝 应用到我的简历</button>`;
+    // 全局保存解析结果
+    window.__importedResumeData = result;
   }
   html += `</div>`;
 
   document.getElementById('importResult').innerHTML = html;
 }
 
-function applyImportedResume(dataStr) {
+function applyImportedResume() {
   try {
-    const d = typeof dataStr === 'string' ? JSON.parse(dataStr) : dataStr;
+    const d = window.__importedResumeData;
+    if (!d) { showToast('没有可应用的数据', 'error'); return; }
     showToast('✨ 已根据上传文件更新简历！', 'success');
-    document.getElementById('resumeImportModal').remove();
-    setTimeout(() => switchView('analysis'), 500);
+    closeResumeImport();
+    setTimeout(() => { switchView('analysis'); }, 500);
   } catch (e) {
     showToast('❌ 应用失败：' + e.message, 'error');
   }

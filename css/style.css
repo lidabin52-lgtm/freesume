@@ -278,7 +278,26 @@ input, textarea, select {
 }
 
 .view.active {
-  display: block;
+  display: block !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* 强制修复：所有 active 视图内的子元素必须可见 */
+.view.active * {
+  opacity: unset !important;
+  visibility: visible !important;
+}
+
+/* 模板库强制可见 */
+.view-templates.active {
+  display: block !important;
+  opacity: 1 !important;
+}
+.view-templates.active .templates-grid {
+  display: grid !important;
+  opacity: 1 !important;
+  min-height: 200px;
 }
 
 @keyframes fadeIn {

@@ -8,6 +8,12 @@
   <meta http-equiv="Expires" content="0" />
   <title>FREESUME · 简历工作台</title>
   <link rel="stylesheet" href="css/style.v3.css" />
+  
+  <!-- 📦 第三方库：PDF解析 + DOCX解析 + PDF导出 -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script>if (window.pdfjsLib) pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';</script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </head>
 <body>
   <!-- 顶部导航 -->
@@ -284,6 +290,7 @@
               <button class="btn-import-resume" onclick="openResumeImport()">📤 上传我的简历（PDF/DOCX）</button>
               <span class="import-hint">或从模板库开始 →</span>
               <button class="btn-template-link" onclick="showView('templates');renderTemplates();">🎨 浏览模板</button>
+              <button class="btn-export-pdf" onclick="exportResumePDF()">📥 导出 PDF</button>
             </div>
 
             <!-- 个人信息区域（蓝色高亮） -->

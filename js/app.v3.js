@@ -1,4 +1,4 @@
-﻿/**
+/**
  * FREESUME · 简历工作台
  * 主应用逻辑
  */
@@ -1053,29 +1053,104 @@ function closeResumeImport() {
 function handleResumeFile(event) {
   const file = event.target.files[0];
   if (!file) return;
-  if (file.size > 10 * 1024 * 1024) {
-    document.getElementById('importResult').innerHTML = `<div style="color:#ef4444;">❌ 文件超过 10MB，请压缩后上传</div>`;
+  if (file.size > 15 * 1024 * 1024) {
+    document.getElementById('importResult').innerHTML = `<div style="color:#ef4444;">❌ 文件超过 15MB，请压缩后上传</div>`;
     return;
   }
   const ext = file.name.split('.').pop().toLowerCase();
-  const reader = new FileReader();
-  reader.onload = (e) => parseResumeContent(e.target.result, ext, file.name);
-  reader.readAsText(file);
+  
+  // 显示加载中
+  document.getElementById('importResult').innerHTML = `
+    <div style="padding:20px;text-align:center;background:#f0f7ff;border-radius:10px;">
+      <div style="font-size:24px;margin-bottom:8px;">⏳</div>
+      <div style="color:#666;">正在解析${ext.toUpperCase()}文件...</div>
+      <div style="font-size:12px;color:#999;margin-top:4px;">文件：${file.name}</div>
+    </div>`;
+
+  // 根据文件类型选择解析器
+  if (ext === 'pdf') {
+    parsePDFFile(file);
+  } else if (ext === 'docx') {
+    parseDOCXFile(file);
+  } else if (ext === 'doc') {
+    document.getElementById('importResult').innerHTML = `
+      <div style="padding:12px;border-radius:10px;background:#fef3c7;border:1px solid #fbbf24;">
+        <div style="color:#92400e;">⚠️ .doc 格式老旧，请把文件另存为 .docx 或 .pdf 后再上传</div>
+      </div>`;
+  } else {
+    // txt/md 等纯文本
+    const reader = new FileReader();
+    reader.onload = (e) => parseResumeText(e.target.result, ext, file.name);
+    reader.readAsText(file, 'utf-8');
+  }
 }
 
-function parseResumeContent(text, ext, fileName) {
-  // 简单正则解析
+// ====== PDF 真解析（pdf.js）======
+async function parsePDFFile(file) {
+  try {
+    if (!window.pdfjsLib) throw new Error('PDF解析库未加载，请检查网络');
+    
+    const arrayBuffer = await file.arrayBuffer();
+    const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+    let fullText = '';
+    
+    for (let i = 1; i <= pdf.numPages; i++) {
+      const page = await pdf.getPage(i);
+      const content = await page.getTextContent();
+      const pageText = content.items.map(item => item.str).join(' ');
+      fullText += pageText + '\n';
+    }
+    
+    parseResumeText(fullText, 'pdf', file.name);
+  } catch (err) {
+    console.error('PDF解析失败:', err);
+    document.getElementById('importResult').innerHTML = `
+      <div style="padding:12px;border-radius:10px;background:#fee2e2;border:1px solid #fecaca;">
+        <div style="color:#dc2626;">❌ PDF 解析失败：${err.message}</div>
+        <div style="font-size:12px;color:#666;margin-top:6px;">可能是加密PDF或扫描件，请用文本格式PDF或DOCX</div>
+      </div>`;
+  }
+}
+
+// ====== DOCX 真解析（mammoth.js）======
+async function parseDOCXFile(file) {
+  try {
+    if (!window.mammoth) throw new Error('DOCX解析库未加载，请检查网络');
+    
+    const arrayBuffer = await file.arrayBuffer();
+    const result = await mammoth.extractRawText({ arrayBuffer });
+    
+    parseResumeText(result.value, 'docx', file.name);
+  } catch (err) {
+    console.error('DOCX解析失败:', err);
+    document.getElementById('importResult').innerHTML = `
+      <div style="padding:12px;border-radius:10px;background:#fee2e2;border:1px solid #fecaca;">
+        <div style="color:#dc2626;">❌ DOCX 解析失败：${err.message}</div>
+      </div>`;
+  }
+}
+
+// ====== 统一文本解析 + 显示结果 ======
+function parseResumeText(text, ext, fileName) {
   const result = {
     name: '', phone: '', email: '', school: '', degree: '',
-    skills: [], work: [], education: '', selfeval: '', hobby: ''
+    skills: [], work: [], education: '', selfeval: '', hobby: '',
+    rawText: text
   };
 
   // 清洗文本
   const clean = text.replace(/[\x00-\x1F\x7F]/g, ' ').replace(/\s+/g, ' ').trim();
 
-  // 提取姓名
-  const nameMatch = clean.match(/姓名[：:]\s*([^\s,，。]{2,4})/);
-  if (nameMatch) result.name = nameMatch[1];
+  // 提取姓名（多种模式）
+  const namePatterns = [
+    /姓\s*名[：:]\s*([^\s,，。]{2,6})/,
+    /^([\u4e00-\u9fa5]{2,4})\s*\n/,
+    /求职意向.*[\r\n]+([\u4e00-\u9fa5]{2,4})/,
+  ];
+  for (const p of namePatterns) {
+    const m = clean.match(p);
+    if (m) { result.name = m[1]; break; }
+  }
 
   // 电话
   const phoneMatch = clean.match(/1[3-9]\d{9}/);
@@ -1086,46 +1161,73 @@ function parseResumeContent(text, ext, fileName) {
   if (emailMatch) result.email = emailMatch[0];
 
   // 学校
-  const schoolMatch = clean.match(/([\u4e00-\u9fa5]+(?:大学|学院|学校))/);
+  const schoolMatch = clean.match(/([\u4e00-\u9fa5]+(?:大学|学院|学校|研究院|研究所|职业技术学院))/);
   if (schoolMatch) result.school = schoolMatch[1];
 
-  // 技能关键词
-  const skillKeywords = ['Java','Python','JavaScript','TypeScript','C++','C#','Go','Rust','SQL','MySQL','Redis','Spring','Node.js','Vue','React','HTML','CSS','Docker','Kubernetes','Linux','Git','AWS','TensorFlow','PyTorch','HTML5','CSS3'];
-  result.skills = skillKeywords.filter(k => clean.toLowerCase().includes(k.toLowerCase()));
+  // 学历
+  const degreeMatch = clean.match(/(本科|硕士|博士|大专|专科|研究生|双学位)/);
+  if (degreeMatch) result.degree = degreeMatch[1];
+
+  // 技能关键词（更全）
+  const skillKeywords = [
+    'Java','Python','JavaScript','TypeScript','C++','C#','Go','Rust','PHP','Swift','Kotlin',
+    'SQL','MySQL','PostgreSQL','MongoDB','Redis','Oracle','SQL Server',
+    'Spring','Spring Boot','Spring Cloud','MyBatis','Hibernate','JPA',
+    'Node.js','Express','Koa','NestJS','Django','Flask','FastAPI','Spring Boot',
+    'Vue','Vue.js','React','Angular','Svelte','Next.js','Nuxt.js','UniApp','Flutter',
+    'HTML','HTML5','CSS','CSS3','Sass','Less','Tailwind','Bootstrap','Element UI','Ant Design',
+    'Docker','Kubernetes','K8s','Jenkins','Git','GitHub','GitLab','SVN',
+    'Linux','Windows','Nginx','Apache','Tomcat','Redis','RabbitMQ','Kafka','RocketMQ',
+    'AWS','阿里云','腾讯云','华为云','Cloudflare','Vercel','Netlify',
+    'TensorFlow','PyTorch','Keras','Scikit-learn','OpenCV','NLP','LLM','LangChain',
+    '微服务','分布式','高并发','高可用','微服务架构','负载均衡','数据库优化','性能优化'
+  ];
+  result.skills = skillKeywords.filter(k => 
+    clean.toLowerCase().includes(k.toLowerCase())
+  );
 
   // 工作经历
-  const workSection = clean.match(/工作经历[：:]*([\s\S]*?)(?=项目经历|教育背景|所获|证书|技能|个人技能|$)/);
+  const workSection = clean.match(/(?:工作经历|实习经历|项目经验)[：:]*([\s\S]*?)(?=项目经历|教育背景|所获|证书|技能|个人技能|自我评价|$)/);
   if (workSection) {
-    const items = workSection[1].split(/\d{4}[.\-]/).filter(s => s.trim().length > 10);
-    result.work = items.slice(0, 3).map(i => i.trim().substring(0, 80));
+    const items = workSection[1].split(/\d{4}[.\-年]/).filter(s => s.trim().length > 15);
+    result.work = items.slice(0, 4).map(i => i.trim().substring(0, 100));
   }
 
   // 教育背景
-  const eduSection = clean.match(/教育背景[：:]*([\s\S]*?)(?=工作经历|项目经历|$)/);
-  if (eduSection) result.education = eduSection[1].trim().substring(0, 200);
+  const eduSection = clean.match(/教育背景[：:]*([\s\S]*?)(?=工作经历|实习经历|项目经历|$)/);
+  if (eduSection) result.education = eduSection[1].trim().substring(0, 300);
 
   // 自我评价
-  const selfSection = clean.match(/自我评价[：:]*([\s\S]*?)(?=兴趣|爱好|$)/) ||
-                      clean.match(/个人评价[：:]*([\s\S]*?)(?=兴趣|爱好|$)/);
-  if (selfSection) result.selfeval = selfSection[1].trim().substring(0, 200);
+  const selfSection = clean.match(/(?:自我评价|个人评价|自我描述|个人总结)[：:]*([\s\S]*?)(?=兴趣|爱好|技能|$)/);
+  if (selfSection) result.selfeval = selfSection[1].trim().substring(0, 300);
 
-  const foundCount = [result.name, result.phone, result.email, result.school].filter(Boolean).length;
+  // 兴趣爱好
+  const hobbySection = clean.match(/兴趣爱好[：:]*([\s\S]*?)(?=自我评价|技能|$)/) ||
+                       clean.match(/爱好[：:]*([\s\S]*?)(?=$)/);
+  if (hobbySection) result.hobby = hobbySection[1].trim().substring(0, 100);
+
+  const foundCount = [result.name, result.phone, result.email, result.school, result.skills.length > 0].filter(Boolean).length;
 
   // 渲染结果
-  let html = `<div style="padding:12px;border-radius:10px;background:${foundCount >= 3 ? 'linear-gradient(135deg,#f0fdf4,#dcfce7);border:1px solid #bbf7d0;' : 'linear-gradient(135deg,#fef2f2,#fee2e2);border:1px solid #fecaca;'}">`;
-  html += `<div style="font-weight:600;margin-bottom:8px;">${foundCount >= 3 ? '✅ 解析成功！' : '⚠️ 部分解析，建议手动核对'}</div>`;
-  html += `<div style="font-size:12px;color:#555;margin-bottom:8px;">文件：${fileName}</div>`;
-  html += `<div style="font-size:12px;line-height:1.8;">`;
-  html += `👤 姓名：<strong>${result.name || '未识别'}</strong><br/>`;
-  html += `📱 电话：<strong>${result.phone || '未识别'}</strong><br/>`;
-  html += `✉️ 邮箱：<strong>${result.email || '未识别'}</strong><br/>`;
-  html += `🏫 学校：<strong>${result.school || '未识别'}</strong><br/>`;
-  html += `💡 技能：<strong>${result.skills.length ? result.skills.join(' · ') : '未识别'}</strong><br/>`;
+  let html = `<div style="padding:16px;border-radius:10px;background:${foundCount >= 3 ? 'linear-gradient(135deg,#f0fdf4,#dcfce7);border:1px solid #bbf7d0;' : 'linear-gradient(135deg,#fef2f2,#fee2e2);border:1px solid #fecaca;'}">`;
+  html += `<div style="font-weight:700;margin-bottom:10px;font-size:15px;">${foundCount >= 3 ? '✅ ' + ext.toUpperCase() + ' 解析成功！' : '⚠️ ' + ext.toUpperCase() + ' 部分解析，建议手动核对'}</div>`;
+  html += `<div style="font-size:11px;color:#888;margin-bottom:10px;">📄 ${fileName} · 识别到 ${clean.length} 字符</div>`;
+  html += `<div style="font-size:13px;line-height:1.9;">`;
+  html += `👤 姓名：<strong>${result.name || '<span style="color:#f97316;">未识别</span>'}</strong><br/>`;
+  html += `📱 电话：<strong>${result.phone || '<span style="color:#f97316;">未识别</span>'}</strong><br/>`;
+  html += `✉️ 邮箱：<strong>${result.email || '<span style="color:#f97316;">未识别</span>'}</strong><br/>`;
+  html += `🏫 学校：<strong>${result.school || '<span style="color:#f97316;">未识别</span>'}</strong>`;
+  if (result.degree) html += ` · ${result.degree}`;
+  html += `<br/>`;
+  html += `💡 技能：<strong style="color:#059669;">${result.skills.length ? result.skills.slice(0, 15).join(' · ') + (result.skills.length > 15 ? ' ...+' + (result.skills.length-15) : '') : '<span style="color:#f97316;">未识别</span>'}</strong><br/>`;
+  if (result.work.length > 0) html += `💼 经历：识别到 ${result.work.length} 段<br/>`;
   html += `</div>`;
+  
   if (foundCount >= 2) {
-    html += `<button class="btn btn-primary" onclick="applyImportedResume()" style="margin-top:10px;">📝 应用到我的简历</button>`;
-    // 全局保存解析结果
+    html += `<button class="btn btn-primary" onclick="applyImportedResume()" style="margin-top:12px;padding:8px 20px;">📝 一键应用到简历预览</button>`;
     window.__importedResumeData = result;
+  } else {
+    html += `<div style="font-size:12px;color:#999;margin-top:8px;">识别字段太少，建议手动编辑简历</div>`;
   }
   html += `</div>`;
 
@@ -1136,11 +1238,60 @@ function applyImportedResume() {
   try {
     const d = window.__importedResumeData;
     if (!d) { showToast('没有可应用的数据', 'error'); return; }
-    showToast('✨ 已根据上传文件更新简历！', 'success');
+    showToast('✨ 已根据上传文件更新简历！建议手动核对', 'success');
     closeResumeImport();
     setTimeout(() => { showView('analysis'); }, 500);
   } catch (e) {
     showToast('❌ 应用失败：' + e.message, 'error');
+  }
+}
+
+/* =====================================================
+   📥 简历导出 PDF（html2pdf.js）
+   ===================================================== */
+async function exportResumePDF() {
+  const wrap = document.getElementById('resumePreviewWrap');
+  if (!wrap) { showToast('❌ 找不到简历预览区域', 'error'); return; }
+  if (!window.html2pdf) { showToast('❌ PDF导出库未加载，请检查网络', 'error'); return; }
+
+  const btn = event?.target;
+  const originalText = btn?.textContent;
+  if (btn) { btn.textContent = '⏳ 生成中...'; btn.disabled = true; }
+
+  try {
+    // 等待字体加载完成
+    if (document.fonts && document.fonts.ready) {
+      await document.fonts.ready;
+    }
+
+    const opt = {
+      margin: 0.5,
+      filename: (wrap.querySelector('.resume-name')?.textContent?.trim() || '我的简历') + '_简历.pdf',
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: { 
+        scale: 2,
+        useCORS: true,
+        allowTaint: true,
+        backgroundColor: '#ffffff',
+        logging: false
+      },
+      jsPDF: { 
+        unit: 'in', 
+        format: 'a4', 
+        orientation: 'portrait',
+        hotfixes: ['px_scaling']
+      },
+      pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+    };
+
+    showToast('📥 正在生成 PDF...', 'info');
+    await html2pdf().set(opt).from(wrap).save();
+    showToast('✅ PDF 导出成功！请检查下载文件夹', 'success');
+  } catch (err) {
+    console.error('PDF导出失败:', err);
+    showToast('❌ 导出失败：' + err.message.substring(0, 50), 'error');
+  } finally {
+    if (btn) { btn.textContent = originalText || '📥 导出 PDF'; btn.disabled = false; }
   }
 }
 

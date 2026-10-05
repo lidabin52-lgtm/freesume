@@ -2522,3 +2522,345 @@ input, textarea, select {
 /* ====== Toast 补充 ====== */
 .toast-success { background: linear-gradient(135deg, #22c55e, #10b981) !important; }
 .toast-error { background: linear-gradient(135deg, #ef4444, #f97316) !important; }
+
+/* =====================================================
+   🎨 简历模板切换系统（9 套主题）
+   ===================================================== */
+
+/* --- 模板选择栏 --- */
+.template-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 10px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+.template-toolbar-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #333;
+  white-space: nowrap;
+}
+.template-chips {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  flex: 1;
+}
+.tpl-chip {
+  padding: 5px 12px;
+  border: 1px solid #e0e0e0;
+  background: #fafafa;
+  border-radius: 16px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.tpl-chip:hover { border-color: #e8613a; color: #e8613a; }
+.tpl-chip.active {
+  background: linear-gradient(135deg, #e8613a, #a855f7);
+  color: #fff;
+  border-color: transparent;
+}
+.btn-reset-tpl {
+  padding: 5px 10px;
+  border: 1px solid #ddd;
+  background: #fff;
+  border-radius: 16px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s;
+}
+.btn-reset-tpl:hover { border-color: #e8613a; color: #e8613a; }
+
+/* --- 通用：简历预览切换过渡 --- */
+#resumePreviewWrap { transition: all 0.3s ease; }
+#resumePreviewWrap .resume-section { transition: all 0.3s ease; }
+
+/* ============== 模板 1：科技蓝 ============== */
+#resumePreviewWrap.tpl-tech {
+  background: linear-gradient(180deg, #f0f7ff 0%, #ffffff 100%);
+}
+#resumePreviewWrap.tpl-tech .resume-section {
+  border-left: 4px solid #2563eb !important;
+  background: #fff;
+  border-radius: 12px;
+  padding: 16px 20px;
+  margin-bottom: 12px;
+  box-shadow: 0 2px 8px rgba(37,99,235,0.08);
+}
+#resumePreviewWrap.tpl-tech .section-label {
+  color: #2563eb !important;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+#resumePreviewWrap.tpl-tech .resume-name { color: #1e40af; font-size: 22px; }
+#resumePreviewWrap.tpl-tech .skill-tag {
+  background: #eff6ff !important;
+  border-color: #bfdbfe !important;
+  color: #1d4ed8 !important;
+}
+
+/* ============== 模板 2：极简白 ============== */
+#resumePreviewWrap.tpl-minimal {
+  background: #fff;
+  font-family: -apple-system, 'Helvetica Neue', sans-serif;
+}
+#resumePreviewWrap.tpl-minimal .resume-section {
+  border: none !important;
+  background: transparent;
+  border-radius: 0;
+  padding: 12px 0;
+  border-bottom: 1px solid #eee !important;
+}
+#resumePreviewWrap.tpl-minimal .resume-section:last-child { border-bottom: none !important; }
+#resumePreviewWrap.tpl-minimal .section-label {
+  color: #999 !important;
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
+#resumePreviewWrap.tpl-minimal .resume-name {
+  color: #111;
+  font-size: 26px;
+  font-weight: 300;
+  letter-spacing: 2px;
+  text-align: center;
+}
+#resumePreviewWrap.tpl-minimal .resume-contact { justify-content: center; color: #666; font-size: 13px; }
+#resumePreviewWrap.tpl-minimal .skill-tag {
+  background: transparent !important;
+  border: 1px solid #ddd !important;
+  color: #555 !important;
+  font-size: 11px;
+  padding: 2px 10px;
+}
+
+/* ============== 模板 3：创意粉 ============== */
+#resumePreviewWrap.tpl-creative {
+  background: linear-gradient(135deg, #fdf2f8 0%, #faf5ff 100%);
+}
+#resumePreviewWrap.tpl-creative .resume-section {
+  border: none !important;
+  background: #fff;
+  border-radius: 16px;
+  padding: 18px;
+  margin-bottom: 14px;
+  box-shadow: 0 4px 16px rgba(236,72,153,0.12);
+  position: relative;
+  overflow: hidden;
+}
+#resumePreviewWrap.tpl-creative .resume-section::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #ec4899, #a855f7);
+}
+#resumePreviewWrap.tpl-creative .section-label {
+  color: #ec4899 !important;
+  font-weight: 600;
+}
+#resumePreviewWrap.tpl-creative .resume-name {
+  background: linear-gradient(135deg, #ec4899, #a855f7);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+#resumePreviewWrap.tpl-creative .skill-tag {
+  background: linear-gradient(135deg, #fdf2f8, #faf5ff) !important;
+  border-color: #fbcfe8 !important;
+  color: #be185d !important;
+}
+
+/* ============== 模板 4：商务深蓝 ============== */
+#resumePreviewWrap.tpl-business {
+  background: #f8fafc;
+}
+#resumePreviewWrap.tpl-business .resume-section {
+  border-left: 4px solid #1e3a5f !important;
+  background: #fff;
+  border-radius: 8px;
+  padding: 14px 18px;
+  margin-bottom: 10px;
+}
+#resumePreviewWrap.tpl-business .section-label {
+  color: #1e3a5f !important;
+  background: linear-gradient(135deg, #1e3a5f, #2563eb);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: 700;
+}
+#resumePreviewWrap.tpl-business .resume-name { color: #1e3a5f; font-weight: 700; }
+#resumePreviewWrap.tpl-business .skill-tag {
+  background: #1e3a5f !important;
+  border-color: #1e3a5f !important;
+  color: #fff !important;
+  font-size: 12px;
+}
+#resumePreviewWrap.tpl-business .edu-header strong,
+#resumePreviewWrap.tpl-business .project-header strong { color: #1e3a5f; }
+
+/* ============== 模板 5：清新翠绿 ============== */
+#resumePreviewWrap.tpl-green {
+  background: linear-gradient(180deg, #f0fdf4 0%, #ffffff 100%);
+}
+#resumePreviewWrap.tpl-green .resume-section {
+  border-left: 4px solid #059669 !important;
+  background: rgba(16,185,129,0.04);
+  border-radius: 8px;
+  padding: 14px 16px;
+  margin-bottom: 10px;
+}
+#resumePreviewWrap.tpl-green .section-label {
+  color: #059669 !important;
+  font-weight: 700;
+}
+#resumePreviewWrap.tpl-green .resume-name { color: #047857; }
+#resumePreviewWrap.tpl-green .skill-tag {
+  background: #d1fae5 !important;
+  border-color: #6ee7b7 !important;
+  color: #065f46 !important;
+}
+#resumePreviewWrap.tpl-green .project-date,
+#resumePreviewWrap.tpl-green .edu-date { color: #059669; }
+
+/* ============== 模板 6：程序员终端 ============== */
+#resumePreviewWrap.tpl-terminal {
+  background: #1e1e2e;
+  color: #cdd6f4;
+  font-family: 'Consolas', 'Fira Code', monospace;
+  border-radius: 12px;
+}
+#resumePreviewWrap.tpl-terminal .resume-section {
+  border-left: none !important;
+  background: transparent !important;
+  padding: 10px 14px;
+  margin-bottom: 6px;
+  border-radius: 6px;
+}
+#resumePreviewWrap.tpl-terminal .resume-section:hover { background: rgba(255,255,255,0.03); }
+#resumePreviewWrap.tpl-terminal .section-label {
+  color: #89b4fa !important;
+  font-weight: 600;
+  font-family: monospace;
+}
+#resumePreviewWrap.tpl-terminal .section-label::before { content: '$ '; }
+#resumePreviewWrap.tpl-terminal .resume-name {
+  color: #a6e3a1;
+  font-family: monospace;
+  font-size: 22px;
+}
+#resumePreviewWrap.tpl-terminal .resume-contact { color: #bac2de; font-family: monospace; }
+#resumePreviewWrap.tpl-terminal .resume-contact span::before { content: '  '; }
+#resumePreviewWrap.tpl-terminal .skill-tag {
+  background: #313244 !important;
+  border: 1px solid #585b70 !important;
+  color: #cdd6f4 !important;
+  font-family: monospace;
+}
+#resumePreviewWrap.tpl-terminal .resume-meta,
+#resumePreviewWrap.tpl-terminal .edu-detail,
+#resumePreviewWrap.tpl-terminal .project-date,
+#resumePreviewWrap.tpl-terminal .edu-date,
+#resumePreviewWrap.tpl-terminal .project-role,
+#resumePreviewWrap.tpl-terminal .project-desc li,
+#resumePreviewWrap.tpl-terminal .resume-section p {
+  color: #cdd6f4;
+  font-family: monospace;
+}
+#resumePreviewWrap.tpl-terminal .edu-header strong,
+#resumePreviewWrap.tpl-terminal .project-header strong {
+  color: #f9e2af;
+  font-family: monospace;
+}
+#resumePreviewWrap.tpl-terminal .resume-section.section-personal { background: rgba(137,180,250,0.06) !important; border-radius: 6px; }
+
+/* ============== 模板 7：产品经理橙 ============== */
+#resumePreviewWrap.tpl-pm {
+  background: #fff;
+}
+#resumePreviewWrap.tpl-pm .resume-section {
+  border-left: none !important;
+  background: transparent;
+  border-radius: 0;
+  padding: 14px 0;
+  margin-bottom: 0;
+  border-bottom: 2px solid #f97316 !important;
+}
+#resumePreviewWrap.tpl-pm .resume-section:last-of-type { border-bottom: none !important; }
+#resumePreviewWrap.tpl-pm .section-label {
+  color: #f97316 !important;
+  font-weight: 700;
+  font-size: 14px;
+}
+#resumePreviewWrap.tpl-pm .section-label::before { content: '▎'; margin-right: 4px; }
+#resumePreviewWrap.tpl-pm .resume-name { color: #111; font-size: 24px; }
+#resumePreviewWrap.tpl-pm .resume-preview > div:first-child { border-bottom: 3px solid #f97316; padding-bottom: 12px; margin-bottom: 12px; }
+#resumePreviewWrap.tpl-pm .skill-tag {
+  background: #fff7ed !important;
+  border-color: #fdba74 !important;
+  color: #9a3412 !important;
+}
+
+/* ============== 模板 8：学术作品集 ============== */
+#resumePreviewWrap.tpl-academic {
+  background: #fafafa;
+  font-family: 'Georgia', 'Times New Roman', serif;
+}
+#resumePreviewWrap.tpl-academic .resume-section {
+  border: none !important;
+  background: transparent;
+  padding: 12px 0;
+  margin-bottom: 0;
+  border-bottom: 1px dashed #ccc !important;
+}
+#resumePreviewWrap.tpl-academic .resume-section:last-child { border-bottom: none !important; }
+#resumePreviewWrap.tpl-academic .section-label {
+  color: #6366f1 !important;
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-family: Georgia, serif;
+}
+#resumePreviewWrap.tpl-academic .resume-name {
+  font-size: 28px;
+  font-weight: 300;
+  letter-spacing: 4px;
+  text-align: center;
+  font-family: Georgia, serif;
+}
+#resumePreviewWrap.tpl-academic .resume-contact { justify-content: center; color: #888; font-size: 13px; }
+#resumePreviewWrap.tpl-academic .skill-tag {
+  background: transparent !important;
+  border: none !important;
+  border-bottom: 1px dotted #94a3b8 !important;
+  border-radius: 0 !important;
+  color: #475569 !important;
+  padding: 2px 6px;
+  font-family: Georgia, serif;
+}
+#resumePreviewWrap.tpl-academic .edu-header strong,
+#resumePreviewWrap.tpl-academic .project-header strong {
+  font-family: Georgia, serif;
+  color: #334155;
+}
+
+/* ============== 模板选择 chips 动态配色 ============== */
+.tpl-chip[data-tpl="default"].active { background: linear-gradient(135deg, #e8613a, #a855f7); }
+.tpl-chip[data-tpl="tech"].active { background: #2563eb; }
+.tpl-chip[data-tpl="minimal"].active { background: #333; }
+.tpl-chip[data-tpl="creative"].active { background: linear-gradient(135deg, #ec4899, #a855f7); }
+.tpl-chip[data-tpl="business"].active { background: linear-gradient(135deg, #1e3a5f, #2563eb); }
+.tpl-chip[data-tpl="green"].active { background: #059669; }
+.tpl-chip[data-tpl="terminal"].active { background: #1e1e2e; border-color: #89b4fa; color: #a6e3a1; }
+.tpl-chip[data-tpl="pm"].active { background: #f97316; }
+.tpl-chip[data-tpl="academic"].active { background: #6366f1; }

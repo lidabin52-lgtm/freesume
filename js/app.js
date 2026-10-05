@@ -1323,3 +1323,47 @@ function renderCompanies() {
     </div>
   `).join('');
 }
+
+/* ====== 简历模板切换引擎 ====== */
+const ALL_TEMPLATES = ['tech','minimal','creative','business','green','terminal','pm','academic'];
+
+function setTemplate(name) {
+  const wrap = document.getElementById('resumePreviewWrap');
+  if (!wrap) return;
+
+  // 移除所有模板 class
+  ALL_TEMPLATES.forEach(t => wrap.classList.remove('tpl-' + t));
+
+  // 如果不是 default，加上对应 class
+  if (name !== 'default') {
+    wrap.classList.add('tpl-' + name);
+  }
+
+  // 更新 chips 高亮
+  document.querySelectorAll('.tpl-chip').forEach(chip => {
+    chip.classList.toggle('active', chip.dataset.tpl === name);
+  });
+
+  // 记住选择（下次刷新还在）
+  try { localStorage.setItem('freesume_tpl', name); } catch(e) {}
+
+  // Toast 提示
+  const names = { default: '默认橙', tech: '科技蓝', minimal: '极简白', creative: '创意粉', business: '商务深蓝', green: '清新翠绿', terminal: '程序员终端', pm: '产品经理橙', academic: '学术作品集' };
+  showToast(`🎨 已切换到「${names[name]}」模板`, 'success');
+}
+
+// 模板 chips 点击事件委托
+document.addEventListener('click', (e) => {
+  const chip = e.target.closest('.tpl-chip');
+  if (chip) {
+    setTemplate(chip.dataset.tpl);
+  }
+});
+
+// 页面加载时恢复上次选的模板
+document.addEventListener('DOMContentLoaded', () => {
+  const saved = localStorage.getItem('freesume_tpl');
+  if (saved && saved !== 'default') {
+    setTimeout(() => setTemplate(saved), 100);
+  }
+});

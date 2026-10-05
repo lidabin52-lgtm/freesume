@@ -258,7 +258,24 @@
             <button class="tab-btn">AI分析</button>
           </div>
 
-          <div class="resume-preview">
+          <div class="resume-preview" id="resumePreviewWrap">
+            <!-- 模板选择器 -->
+            <div class="template-toolbar">
+              <span class="template-toolbar-label">🎨 简历模板：</span>
+              <div class="template-chips" id="templateChips">
+                <button class="tpl-chip active" data-tpl="default">默认橙</button>
+                <button class="tpl-chip" data-tpl="tech">科技蓝</button>
+                <button class="tpl-chip" data-tpl="minimal">极简白</button>
+                <button class="tpl-chip" data-tpl="creative">创意粉</button>
+                <button class="tpl-chip" data-tpl="business">商务深蓝</button>
+                <button class="tpl-chip" data-tpl="green">清新翠绿</button>
+                <button class="tpl-chip" data-tpl="terminal">程序员终端</button>
+                <button class="tpl-chip" data-tpl="pm">产品经理橙</button>
+                <button class="tpl-chip" data-tpl="academic">学术作品集</button>
+              </div>
+              <button class="btn-reset-tpl" onclick="setTemplate('default')" title="恢复默认">↺</button>
+            </div>
+
             <!-- 导入简历按钮 -->
             <div class="resume-import-bar">
               <button class="btn-import-resume" onclick="openResumeImport()">📤 上传我的简历（PDF/DOCX）</button>

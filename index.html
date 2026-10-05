@@ -22,6 +22,7 @@
       <a href="#" class="nav-link" data-view="matching">岗位匹配</a>
       <a href="#" class="nav-link" data-view="companies">大厂直达</a>
       <a href="#" class="nav-link" data-view="tracking">投递记录</a>
+      <a href="#" class="nav-link" data-view="templates">🎨 模板库</a>
     </nav>
     <div class="nav-right">
       <div class="nav-ai-status" id="navAIStatus" onclick="openAISettings()" title="点击配置AI">
@@ -258,67 +259,117 @@
           </div>
 
           <div class="resume-preview">
+            <!-- 导入简历按钮 -->
+            <div class="resume-import-bar">
+              <button class="btn-import-resume" onclick="openResumeImport()">📤 上传我的简历（PDF/DOCX）</button>
+              <span class="import-hint">或从模板库开始 →</span>
+              <button class="btn-template-link" onclick="switchView('templates')">🎨 浏览模板</button>
+            </div>
+
             <!-- 个人信息区域（蓝色高亮） -->
-            <div class="resume-section section-personal">
+            <div class="resume-section section-personal" id="resumePersonal">
               <span class="section-label">个人信息</span>
-              <h2 class="resume-name">张意明</h2>
+              <h2 class="resume-name">李大斌</h2>
               <div class="resume-contact">
-                <span>📱 19975760</span>
-                <span>✉️ 201113747@qq.com</span>
-                <span>📍 浙江杭州</span>
+                <span>📱 19068051907</span>
+                <span>✉️ ldb_888@qq.com</span>
+                <span>📍 江西省</span>
               </div>
               <div class="resume-meta">
-                <span>2005-12-09</span>
+                <span>23岁</span>
                 <span class="divider">|</span>
-                <span>中国</span>
+                <span>男</span>
+                <span class="divider">|</span>
+                <span>求职意向：Java软件开发</span>
               </div>
             </div>
 
             <!-- 教育背景区域（绿色高亮） -->
-            <div class="resume-section section-education">
+            <div class="resume-section section-education" id="resumeEducation">
               <span class="section-label">教育背景</span>
               <div class="edu-item">
                 <div class="edu-header">
-                  <strong>南昌航空大学</strong>
-                  <span class="edu-date">2023-09 ~ 2027-06</span>
+                  <strong>厦门华厦学院</strong>
+                  <span class="edu-date">2022 - 2028</span>
                 </div>
-                <div class="edu-detail">软件工程 · 本科</div>
-                <div class="edu-detail">江西南昌</div>
+                <div class="edu-detail">通信工程 · 本科</div>
+                <div class="edu-detail">主修：数据库技术、计算机应用技术、IP网络技术、信号与系统等</div>
               </div>
             </div>
 
-            <!-- 项目经历区域（橙色高亮） -->
-            <div class="resume-section section-project">
-              <span class="section-label">项目经历</span>
+            <!-- 项目/工作经历区域（橙色高亮） -->
+            <div class="resume-section section-project" id="resumeProject">
+              <span class="section-label">项目/工作经历</span>
               <div class="project-item">
                 <div class="project-header">
-                  <strong>K203 传统棋牌游戏管理系统（校企合作）</strong>
-                  <span class="project-role">项目负责人</span>
+                  <strong>厦门校林广记网络科技有限公司</strong>
+                  <span class="project-role">服务商</span>
                 </div>
-                <div class="project-date">2024-09 ~ 2024-12</div>
+                <div class="project-date">2024.03 - 2024.08</div>
                 <ul class="project-desc">
-                  <li>作为项目负责人，主导各地各级联调协议的超精化设计，保障系统高可用与数据一致性，负责后端包括MAVCT层选型与改造，实际业务代码全部经过STL API。实现多设备间数据同步持久化，以及MySQL高并发事务处理。</li>
-                  <li>负责数据库的性能与安全优化，建立多套高并发测试场景，查询效率提升23%。</li>
+                  <li>负责寻找优质合作伙伴并达成账号合作，协助公司与号主处理合作过程中的问题</li>
+                  <li>业绩：截止目前已促成超100例合作关系</li>
+                </ul>
+              </div>
+              <div class="project-item">
+                <div class="project-header">
+                  <strong>越境云服供应链有限公司（莆田）</strong>
+                  <span class="project-role">跨境电商运营</span>
+                </div>
+                <div class="project-date">2025.11 - 2026.03</div>
+                <ul class="project-desc">
+                  <li>独立完成商品上架与 Listing 优化，提高产品展示效果</li>
+                  <li>跟踪订单流程与物流状态，确保发货及时、准确；协助分析产品数据</li>
                 </ul>
               </div>
             </div>
 
             <!-- 专业技能区域（紫色高亮） -->
-            <div class="resume-section section-skill">
+            <div class="resume-section section-skill" id="resumeSkill">
               <span class="section-label">专业技能</span>
               <div class="skill-tags">
                 <span class="skill-tag">Java</span>
-                <span class="skill-tag">Spring Boot</span>
+                <span class="skill-tag">Python</span>
+                <span class="skill-tag">JavaScript</span>
+                <span class="skill-tag">C++</span>
+                <span class="skill-tag">CSS/XML</span>
                 <span class="skill-tag">MySQL</span>
-                <span class="skill-tag">Redis</span>
-                <span class="skill-tag">分布式</span>
+                <span class="skill-tag">HTML</span>
+              </div>
+              <div class="skill-tags" style="margin-top:8px;">
+                <span class="skill-tag skill-tag-soft">日语N3（备考中）</span>
+                <span class="skill-tag skill-tag-soft">WPS Office（备考）</span>
+                <span class="skill-tag skill-tag-soft">驾驶证（三年）</span>
+              </div>
+            </div>
+
+            <!-- 校园经历 -->
+            <div class="resume-section" id="resumeCampus" style="border-left:3px solid #a29bfe;background:rgba(162,155,254,0.04);">
+              <span class="section-label">校园经历</span>
+              <ul class="project-desc">
+                <li>2022.10 长富日间喘息志愿服务（4小时）：陪伴身心障碍儿童完成手工绘画、做蛋糕等公益活动</li>
+                <li>厦门华厦学院第三届 ICT 基地"形象大使"决赛 <strong>三等奖</strong></li>
+                <li>信息与智能机电学院"宿舍风采大赛" <strong>三等奖</strong></li>
+                <li>参加辩论赛、书香阅读会、羽毛球赛等文体活动</li>
+              </ul>
+            </div>
+
+            <!-- 兴趣爱好 -->
+            <div class="resume-section" id="resumeHobby" style="border-left:3px solid #fab1a0;background:rgba(250,177,160,0.04);">
+              <span class="section-label">兴趣爱好</span>
+              <div class="skill-tags">
+                <span class="skill-tag">📚 阅读</span>
+                <span class="skill-tag">🚴 骑行</span>
+                <span class="skill-tag">🏔️ 旅游爬山</span>
+                <span class="skill-tag">🎵 音乐</span>
+                <span class="skill-tag">🏀 篮球</span>
               </div>
             </div>
 
             <!-- 自我评价区域（粉色高亮） -->
-            <div class="resume-section section-selfeval">
+            <div class="resume-section section-selfeval" id="resumeSelfEval">
               <span class="section-label">自我评价</span>
-              <p>对后端充满热情，愿意持续保持学习。待人真诚，做事严谨细致。具备良好的团队合作精神，能够快速融入新环境。</p>
+              <p>熟悉 Java 语言，对 JVM 原理有一定了解；5 年以上 Java 开发经验，具有大规模高并发访问的 Web 应用架构设计和开发经验。<br/><br/>待人真诚，做事严谨细致，具备良好的团队合作精神，能快速融入新环境。对后端开发充满热情，愿意持续保持学习。</p>
             </div>
           </div>
 
@@ -924,7 +975,69 @@
       </div>
     </section>
 
+    <!-- 模板库视图 -->
+    <section class="view view-templates" id="view-templates">
+      <div class="templates-header">
+        <div>
+          <h1>🎨 简历模板库</h1>
+          <p class="templates-sub">精选 8 套风格，新人直接套用 · 选中一键应用到你的简历</p>
+        </div>
+        <div class="templates-filters">
+          <button class="filter-btn active" data-filter="all">全部</button>
+          <button class="filter-btn" data-filter="it">IT/技术</button>
+          <button class="filter-btn" data-filter="design">设计/创意</button>
+          <button class="filter-btn" data-filter="business">产品/运营</button>
+          <button class="filter-btn" data-filter="minimal">简洁/学术</button>
+        </div>
+      </div>
+
+      <div class="templates-grid" id="templatesGrid">
+        <!-- 模板卡片 JS 动态渲染 -->
+      </div>
+
+      <!-- 模板预览模态框 -->
+      <div class="modal-overlay" id="templatePreviewModal">
+        <div class="modal" style="max-width:800px;">
+          <div class="modal-header">
+            <h3 id="templatePreviewTitle">模板预览</h3>
+            <button class="modal-close" onclick="document.getElementById('templatePreviewModal').remove()">✕</button>
+          </div>
+          <div class="modal-body" id="templatePreviewBody" style="max-height:60vh;overflow-y:auto;"></div>
+          <div class="modal-footer">
+            <button class="btn btn-outline" onclick="document.getElementById('templatePreviewModal').remove()">关闭</button>
+            <button class="btn btn-primary" id="templateApplyBtn" onclick="applyTemplate()">✨ 应用此模板到我的简历</button>
+          </div>
+        </div>
+      </div>
+    </section>
   </main>
+
+  <!-- 简历导入模态框 -->
+  <div class="modal-overlay" id="resumeImportModal">
+    <div class="modal" style="max-width:560px;">
+      <div class="modal-header">
+        <h3>📤 导入我的简历</h3>
+        <button class="modal-close" onclick="document.getElementById('resumeImportModal').remove()">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="resume-dropzone" id="resumeDropzone">
+          <div class="dropzone-icon">📄</div>
+          <div class="dropzone-title">拖拽简历文件到这里</div>
+          <div class="dropzone-sub">支持 PDF / DOCX / TXT 格式 · 最大 10MB</div>
+          <div class="dropzone-or">或</div>
+          <button class="btn btn-primary" onclick="document.getElementById('resumeFileInput').click()">选择文件</button>
+          <input type="file" id="resumeFileInput" accept=".pdf,.docx,.txt,.doc" style="display:none;" onchange="handleResumeFile(event)" />
+        </div>
+        <div id="importResult" style="margin-top:16px;"></div>
+        <div style="margin-top:16px;padding:12px;background:var(--bg-secondary,#f8f9fa);border-radius:8px;font-size:12px;color:#888;">
+          💡 <strong>小提示：</strong>上传后 FREESUME 会自动解析关键信息，AI 帮你优化成专业简历。如果解析不准，可以手动修改简历预览区域的内容。
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="document.getElementById('resumeImportModal').remove()">取消</button>
+      </div>
+    </div>
+  </div>
 
   <!-- Toast 通知 -->
   <div class="toast-container" id="toastContainer"></div>

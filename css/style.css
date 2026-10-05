@@ -2864,3 +2864,76 @@ input, textarea, select {
 .tpl-chip[data-tpl="terminal"].active { background: #1e1e2e; border-color: #89b4fa; color: #a6e3a1; }
 .tpl-chip[data-tpl="pm"].active { background: #f97316; }
 .tpl-chip[data-tpl="academic"].active { background: #6366f1; }
+
+/* ====== 投递记录可视化统计 ====== */
+.tracking-stat-card {
+  display: inline-block;
+  padding: 12px 20px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+  text-align: center;
+  min-width: 90px;
+  margin: 4px;
+}
+.stat-big { font-size: 28px; font-weight: 700; color: #e8613a; }
+.stat-label { font-size: 12px; color: #888; margin-top: 4px; }
+
+.tracking-bar-chart {
+  margin-top: 16px;
+  padding: 16px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+}
+.bar-chart-title { font-weight: 600; margin-bottom: 12px; font-size: 14px; }
+.bar-chart-bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  height: 160px;
+  padding: 0 8px;
+  border-bottom: 2px solid #f0f0f0;
+}
+.bar-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  height: 100%;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+.bar-item:hover { transform: translateY(-4px); }
+.bar-fill {
+  width: 100%;
+  max-width: 32px;
+  border-radius: 4px 4px 0 0;
+  min-height: 4px;
+  transition: height 0.5s ease;
+}
+.bar-value {
+  font-size: 11px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 4px;
+}
+.bar-label {
+  font-size: 10px;
+  color: #888;
+  margin-top: 6px;
+  white-space: nowrap;
+}
+
+/* ====== 大厂直达 chip 激活态 ====== */
+#companyChips .chip {
+  cursor: pointer;
+  transition: all 0.2s;
+}
+#companyChips .chip:hover { background: #f0f0f0; }
+#companyChips .chip.active {
+  background: linear-gradient(135deg, #e8613a, #a855f7);
+  color: #fff;
+  border-color: transparent;
+}

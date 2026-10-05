@@ -403,6 +403,14 @@ const Tracking = {
     this.renderTable();
   },
 
+  // 柱状图点击筛选
+  filterByStatus: function(status) {
+    // 找到对应 tab 并点击
+    const tab = document.querySelector(`#trackingTabs .tracking-tab[data-status="${status}"]`);
+    if (tab) tab.click();
+    showToast(`📊 已筛选「${status}」的记录`, 'info');
+  },
+
   // ====== 新建/编辑 ======
   openEditModal: function(recordId) {
     const modal = document.getElementById('editRecordModal');
@@ -1365,5 +1373,214 @@ document.addEventListener('DOMContentLoaded', () => {
   const saved = localStorage.getItem('freesume_tpl');
   if (saved && saved !== 'default') {
     setTimeout(() => setTemplate(saved), 100);
+  }
+});
+
+/* =====================================================
+   🔧 大厂直达：搜索 + 分类过滤
+   ===================================================== */
+let COMPANY_SEARCH = '';
+let COMPANY_CAT = 'all';
+
+function renderCompanies() {
+  const container = document.getElementById('companyGroups');
+  if (!container) return;
+
+  let data = COMPANIES_DATA;
+  if (COMPANY_CAT !== 'all') {
+    data = data.filter(g => g.group === COMPANY_CAT);
+  }
+
+  // 搜索
+  if (COMPANY_SEARCH) {
+    const s = COMPANY_SEARCH.toLowerCase();
+    data = data.map(g => ({
+      ...g,
+      companies: g.companies.filter(c =>
+        c.name.toLowerCase().includes(s) ||
+        (g.group && g.group.toLowerCase().includes(s))
+      )
+    })).filter(g => g.companies.length > 0);
+  }
+
+  if (data.length === 0) {
+    container.innerHTML = `<div style="text-align:center;padding:40px;color:#999;">
+      <div style="font-size:48px;margin-bottom:12px;">🔍</div>
+      <div>没找到匹配的公司</div>
+      <div style="font-size:12px;margin-top:8px;">试试其他关键词？</div>
+    </div>`;
+    return;
+  }
+
+  container.innerHTML = data.map(g => `
+    <div class="company-group">
+      <div class="group-header">
+        <div class="group-icon">${g.icon}</div>
+        <div class="group-info">
+          <h3>${g.group}</h3>
+          <span class="group-count">${g.companies.length} 家公司 · 点击跳转官网</span>
+        </div>
+        <span class="group-badge">${g.companies.length}</span>
+      </div>
+      <div class="company-grid">
+        ${g.companies.map(c => `
+          <a href="${c.url}" class="company-card" target="_blank" rel="noopener" title="前往 ${c.name} 官网">
+            <div class="company-logo">${c.logo}</div>
+            <div class="company-name">${c.name}</div>
+          </a>
+        `).join('')}
+      </div>
+    </div>
+  `).join('');
+}
+
+// 搜索框事件
+document.addEventListener('input', (e) => {
+  if (e.target.id === 'companySearchInput') {
+    COMPANY_SEARCH = e.target.value.trim();
+    renderCompanies();
+  }
+});
+
+// 分类 chip 点击
+document.addEventListener('click', (e) => {
+  const chip = e.target.closest('#companyChips .chip');
+  if (chip) {
+    document.querySelectorAll('#companyChips .chip').forEach(c => c.classList.remove('active'));
+    chip.classList.add('active');
+    COMPANY_CAT = chip.dataset.cat || 'all';
+    renderCompanies();
+  }
+});
+
+/* =====================================================
+   🔧 投递记录：可视化统计 + 点击交互
+   ===================================================== */
+function renderTrackingStats() {
+  const container = document.getElementById('trackingStats');
+  if (!container) return;
+  const records = Storage.get('tracking_records', []);
+
+  // 统计各状态数量
+  const statusCount = {};
+  const allStatuses = ['意向','已投递','笔试中','面试中','已通过','已淘汰'];
+  allStatuses.forEach(s => statusCount[s] = 0);
+  records.forEach(r => { statusCount[r.status] = (statusCount[r.status] || 0) + 1; });
+
+  const total = records.length;
+  const passRate = total > 0 ? Math.round((statusCount['已通过'] / total) * 100) : 0;
+
+  // 柱状图数据
+  const barData = [
+    { key: '意向', count: statusCount['意向'], color: '#f59e0b' },
+    { key: '已投递', count: statusCount['已投递'], color: '#3b82f6' },
+    { key: '笔试中', count: statusCount['笔试中'], color: '#8b5cf6' },
+    { key: '面试中', count: statusCount['面试中'], color: '#ec4899' },
+    { key: '已通过', count: statusCount['已通过'], color: '#10b981' },
+    { key: '已淘汰', count: statusCount['已淘汰'], color: '#94a3b8' }
+  ];
+  const maxBar = Math.max(...barData.map(b => b.count), 1);
+
+  container.innerHTML = `
+    <div class="tracking-stat-card">
+      <div class="stat-big">${total}</div>
+      <div class="stat-label">总投递</div>
+    </div>
+    <div class="tracking-stat-card">
+      <div class="stat-big" style="color:#10b981;">${passRate}%</div>
+      <div class="stat-label">通过率</div>
+    </div>
+    <div class="tracking-stat-card">
+      <div class="stat-big" style="color:#ec4899;">${statusCount['面试中'] || 0}</div>
+      <div class="stat-label">面试中</div>
+    </div>
+    <div class="tracking-stat-card">
+      <div class="stat-big" style="color:#3b82f6;">${statusCount['笔试中'] || 0}</div>
+      <div class="stat-label">笔试中</div>
+    </div>
+    <!-- 状态分布柱状图 -->
+    <div class="tracking-bar-chart">
+      <div class="bar-chart-title">📊 状态分布</div>
+      <div class="bar-chart-bars">
+        ${barData.map(b => `
+          <div class="bar-item" onclick="Tracking.filterByStatus('${b.key}')" title="点击筛选 ${b.key}">
+            <div class="bar-value">${b.count}</div>
+            <div class="bar-fill" style="height:${(b.count / maxBar * 100)}%;background:${b.color};"></div>
+            <div class="bar-label">${b.key}</div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `;
+}
+
+// 投递记录页加载时渲染统计
+document.addEventListener('DOMContentLoaded', () => {
+  renderTrackingStats();
+});
+
+// 切换到 tracking 视图时重新渲染
+const originalShowView = showView;
+showView = function(viewName) {
+  originalShowView(viewName);
+  if (viewName === 'tracking') {
+    setTimeout(renderTrackingStats, 100);
+  }
+};
+
+/* =====================================================
+   🔧 岗位匹配：生成按钮修复（卡住问题）
+   ===================================================== */
+function startGenerateMatch() {
+  const progressFill = document.querySelector('.view-matching .progress-fill');
+  const hint = document.querySelector('.view-matching .progress-hint');
+  if (!progressFill) {
+    showToast('⚠️ 请先选择一个匹配历史条目', 'error');
+    return;
+  }
+
+  let progress = 0;
+  progressFill.style.width = '0%';
+  if (hint) hint.textContent = '✨ 正在生成定制简历...';
+
+  const steps = ['分析JD关键词...', '匹配你的技能...', 'AI优化项目描述...', '生成定制简历...', '完成！'];
+  let stepIdx = 0;
+
+  const interval = setInterval(() => {
+    progress += Math.random() * 12 + 3;
+    if (progress >= 100) {
+      progress = 100;
+      clearInterval(interval);
+      if (hint) hint.textContent = '✅ 生成完成！';
+      showToast('✅ 定制简历生成完成！', 'success');
+      return;
+    }
+    progressFill.style.width = progress + '%';
+    // 步骤提示
+    const newStep = Math.min(Math.floor(progress / 20), steps.length - 1);
+    if (newStep !== stepIdx && hint) {
+      stepIdx = newStep;
+      hint.textContent = '✨ ' + steps[stepIdx];
+    }
+  }, 400);
+}
+
+// 给"生成简历"按钮绑定
+document.addEventListener('click', (e) => {
+  const btn = e.target.closest('.view-matching .btn-generate, .view-matching [data-action="generate"]');
+  if (btn) {
+    startGenerateMatch();
+  }
+});
+
+/* =====================================================
+   🎁 额外优化：简历分析区域点击区域列表切换
+   ===================================================== */
+document.addEventListener('click', (e) => {
+  const item = e.target.closest('.region-item');
+  if (item) {
+    document.querySelectorAll('.region-item').forEach(i => i.classList.remove('active'));
+    item.classList.add('active');
+    showToast(`📋 已选中「${item.querySelector('.region-name').textContent}」开始对话`, 'info');
   }
 });

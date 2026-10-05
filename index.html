@@ -45,9 +45,9 @@
       <!-- Hero区域 -->
       <div class="hero-section">
         <div class="hero-content">
-          <div class="hero-badge">🏆 TRAE AI创造力大赛 Top 20</div>
-          <h1 class="hero-title">让简历自己说话<br/><span class="gradient-text">看见真实的自己</span></h1>
-          <p class="hero-desc">AI驱动的简历工作台 · 近100万关注 · 让你解放双手</p>
+          <div class="hero-badge">🚀 FREESUME · AI简历工作台</div>
+          <h1 class="hero-title">让简历自己说话<br/><span class="gradient-text">看见真实的你</span></h1>
+          <p class="hero-desc">AI驱动的简历工作台 · 9大模板一键切换 · 115+大厂直达</p>
           <div class="hero-actions">
             <button class="btn btn-primary" onclick="showView('analysis')">
               <span>开始分析简历</span>
@@ -705,18 +705,13 @@
       </div>
 
       <div class="search-bar">
-        <input type="text" class="search-input" placeholder="搜索公司名或关键词" />
-        <div class="filter-chips">
-          <span class="chip active">全部 250</span>
-          <span class="chip">互联网大厂 75</span>
-          <span class="chip">传统大厂 20</span>
-          <span class="chip">电子设备 6</span>
-          <span class="chip">能源电力 22</span>
-          <span class="chip">建筑工程 15</span>
-          <span class="chip">航天航空 15</span>
-          <span class="chip">国有大型·股份制银行 20</span>
-          <span class="chip">保险金融头部 10</span>
-          <span class="chip">汽车制造 18</span>
+        <input type="text" class="search-input" id="companySearchInput" placeholder="🔍 搜索公司名或关键词" />
+        <div class="filter-chips" id="companyChips">
+          <span class="chip active" data-cat="all">全部</span>
+          <span class="chip" data-cat="互联网大厂">互联网大厂</span>
+          <span class="chip" data-cat="传统大厂">传统大厂</span>
+          <span class="chip" data-cat="金融科技">金融科技</span>
+          <span class="chip" data-cat="人工智能">人工智能</span>
         </div>
       </div>
 

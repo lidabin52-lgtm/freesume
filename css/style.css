@@ -2286,3 +2286,92 @@ input, textarea, select {
     transform: translateX(30px);
   }
 }
+
+/* ===== AI 设置面板升级版 ===== */
+.provider-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.provider-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px;
+  border: 2px solid var(--border, #eee);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+  background: var(--bg-card, #fff);
+}
+
+.provider-card:hover {
+  border-color: var(--primary, #e8613a);
+  background: rgba(232, 97, 58, 0.03);
+}
+
+.provider-card.selected {
+  border-color: var(--primary, #e8613a);
+  background: rgba(232, 97, 58, 0.08);
+}
+
+.provider-logo {
+  font-size: 22px;
+  width: 32px;
+  text-align: center;
+}
+
+.provider-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.provider-name {
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--text-primary, #333);
+}
+
+.provider-note {
+  font-size: 11px;
+  color: var(--text-secondary, #888);
+  margin-top: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.provider-check {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid #ddd;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  color: transparent;
+  transition: all 0.2s;
+}
+
+.provider-card.selected .provider-check {
+  border-color: var(--primary, #e8613a);
+  background: var(--primary, #e8613a);
+  color: #fff;
+}
+
+/* 流式打字机光标 */
+.message-bubble .cursor {
+  display: inline-block;
+  color: var(--primary, #e8613a);
+  animation: blink 0.8s infinite;
+  margin-left: 1px;
+}
+
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}

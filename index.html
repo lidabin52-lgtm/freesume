@@ -932,102 +932,146 @@
   <script src="js/ai.js"></script>
   <script src="js/app.js"></script>
   <script>
-    // ====== 简历分析AI对话 ======
+    // ====== 简历分析AI对话（流式打字机版）======
     document.addEventListener('DOMContentLoaded', () => {
       AI.init();
       updateAIStatus();
-      
-      // 监听导航切换时更新状态
       setInterval(updateAIStatus, 5000);
-      
-      // 简历分析对话发送
+
+      // 简历分析对话发送（流式）
       const chatInput = document.querySelector('.chat-input');
       const sendBtn = document.querySelector('.chat-input-area .send-btn');
       if (chatInput && sendBtn) {
         async function sendChat() {
           const text = chatInput.value.trim();
           if (!text) return;
-          
-          // 添加用户消息
           appendChatMessage('user', text);
           chatInput.value = '';
           chatInput.style.height = 'auto';
-          
-          // 显示加载中
-          appendChatMessage('loading', 'AI 分析中...');
-          
-          // 调用AI
-          const response = await AI.chat(
-            [{ role: 'user', content: text }],
-            '简历分析助手。请针对用户的问题，从简历优化、技术深度、项目展示等角度给出专业建议。用Markdown格式输出，结构清晰。'
-          );
-          
-          // 移除loading，添加AI回复
-          const loadingEl = document.querySelector('.chat-message.loading');
-          if (loadingEl) loadingEl.remove();
-          appendChatMessage('ai', response);
+
+          // 创建空的 AI 消息占位
+          const aiMsg = createStreamMessage();
+          const bubble = aiMsg.querySelector('.message-bubble');
+
+          try {
+            await AI.chatStream(
+              [{ role: 'user', content: text }],
+              '简历分析助手。请针对用户的问题，从简历优化、技术深度、项目展示等角度给出专业建议。用Markdown格式输出，结构清晰。',
+              (chunk) => {
+                bubble._rawContent = (bubble._rawContent || '') + chunk;
+                bubble.innerHTML = formatMarkdown(bubble._rawContent) + '<span class="cursor">▊</span>';
+                const chatArea = document.querySelector('.chat-area');
+                chatArea.scrollTop = chatArea.scrollHeight;
+              }
+            );
+            // 结束：去掉光标，加操作按钮
+            bubble.innerHTML = formatMarkdown(bubble._rawContent || '');
+            addQuickActions(aiMsg, bubble._rawContent || '');
+          } catch (err) {
+            bubble.innerHTML = '❌ AI 调用失败：' + err.message;
+          }
         }
-        
         sendBtn.addEventListener('click', sendChat);
         chatInput.addEventListener('keydown', (e) => {
-          if (e.key === 'Enter' && !e.shiftKey) {
-            e.preventDefault();
-            sendChat();
-          }
+          if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendChat(); }
         });
       }
-      
-      // AI生成自我评价按钮
+
+      // AI生成自我评价（流式到 textarea）
       document.querySelectorAll('.btn-ai-generate').forEach(btn => {
-        btn.removeEventListener('click', btn._aiHandler);
         btn._aiHandler = async function() {
           const textarea = this.closest('.form-group')?.querySelector('.form-textarea');
           const contextInput = this.closest('.step-body, .modal-body')?.querySelector('.form-input');
           const context = contextInput?.value || '';
-          
-          showToast('AI 正在生成...', 'info');
-          
-          const response = await AI.chat(
-            [{ role: 'user', content: context }],
-            '请根据用户提供的经历，生成一段真诚、自然的自我评价（300-400字）。突出技术热情、学习能力、团队协作和解决问题的能力。'
-          );
-          
-          if (textarea) textarea.value = response;
-          showToast('✅ AI 已生成内容', 'success');
+          if (!textarea) return;
+
+          textarea.value = '';
+          this.disabled = true;
+          this.textContent = '生成中...';
+          try {
+            await AI.chatStream(
+              [{ role: 'user', content: context }],
+              '请根据用户提供的经历，生成一段真诚、自然的自我评价（300-400字）。突出技术热情、学习能力、团队协作和解决问题的能力。',
+              (chunk) => { textarea.value += chunk; }
+            );
+            showToast('✅ AI 已生成', 'success');
+          } catch (err) {
+            textarea.value = '生成失败：' + err.message;
+            showToast('❌ AI 调用失败', 'error');
+          } finally {
+            this.disabled = false;
+            this.textContent = '✨ AI 生成';
+          }
         };
         btn.addEventListener('click', btn._aiHandler);
       });
-      
-      // 复盘AI分析按钮
+
+      // 复盘 AI 分析（流式）
       const replayAiBtn = document.querySelector('#replayModal .btn-ai-generate');
       if (replayAiBtn) {
         replayAiBtn.addEventListener('click', async function() {
-          const questionsTextarea = document.querySelectorAll('#replayModal .form-textarea')[0];
-          const contentTextarea = document.querySelectorAll('#replayModal .form-textarea')[1];
-          const questions = questionsTextarea?.value || '';
-          
+          const qTA = document.querySelectorAll('#replayModal .form-textarea')[0];
+          const cTA = document.querySelectorAll('#replayModal .form-textarea')[1];
+          const questions = qTA?.value || '';
           if (!questions) { showToast('请先填写关键问题', 'error'); return; }
-          
-          showToast('AI 正在分析面试问题...', 'info');
-          
-          const response = await AI.chat(
-            [{ role: 'user', content: `面试问题：\n${questions}\n\n请帮我分析这些问题考察的知识点，并给出改进建议。` }],
-            '面试复盘助手。用户提供了面试中被问到的问题，请分析：1. 每个问题考察的知识点 2. 回答中的不足 3. 下次改进建议'
-          );
-          
-          if (contentTextarea) contentTextarea.value = response;
-          showToast('✅ AI 分析完成', 'success');
+
+          cTA.value = '';
+          this.disabled = true;
+          this.textContent = '分析中...';
+          try {
+            await AI.chatStream(
+              [{ role: 'user', content: `面试问题：\n${questions}\n\n请帮我分析这些问题考察的知识点，并给出改进建议。` }],
+              '面试复盘助手。用户提供了面试中被问到的问题，请分析：1. 每个问题考察的知识点 2. 回答中的不足 3. 下次改进建议',
+              (chunk) => { cTA.value += chunk; }
+            );
+            showToast('✅ AI 分析完成', 'success');
+          } catch (err) {
+            cTA.value = '分析失败：' + err.message;
+            showToast('❌ AI 调用失败', 'error');
+          } finally {
+            this.disabled = false;
+            this.textContent = '✨ AI 分析';
+          }
         });
       }
     });
-    
+
+    function createStreamMessage() {
+      const chatArea = document.querySelector('.chat-area');
+      if (!chatArea) return null;
+      const quickActions = chatArea.querySelector('.quick-actions');
+      if (quickActions) quickActions.remove();
+
+      const msgDiv = document.createElement('div');
+      msgDiv.className = 'chat-message ai';
+      msgDiv.innerHTML = `
+        <div class="message-avatar ai-avatar">AI</div>
+        <div class="message-content">
+          <div class="message-bubble">
+            <span style="color:#888;font-size:12px;">AI 思考中...</span>
+          </div>
+        </div>
+      `;
+      chatArea.appendChild(msgDiv);
+      chatArea.scrollTop = chatArea.scrollHeight;
+      return msgDiv;
+    }
+
+    function addQuickActions(msgDiv, content) {
+      const ca = document.createElement('div');
+      ca.className = 'quick-actions';
+      ca.innerHTML = `<button class="quick-btn" onclick="copyToClipboard(\`${content.replace(/`/g,'\\`').replace(/\\/g,'\\\\').replace(/\$/g,'\\$')}\`)">📋 复制</button>
+        <button class="quick-btn" onclick="this.closest('.chat-message').remove(); showToast('已删除','info')">🗑️</button>`;
+      msgDiv.querySelector('.message-content').appendChild(ca);
+    }
+
     function updateAIStatus() {
       const text = document.getElementById('aiStatusText');
       const dot = document.querySelector('#navAIStatus .ai-dot');
       if (!text || !dot) return;
-      
       if (AI.hasRealAPI()) {
-        text.textContent = 'AI: 在线';
+        const p = AI.getProvider(AI.config.provider);
+        text.textContent = p ? `AI: ${p.name}` : 'AI: 在线';
         dot.style.background = '#00b894';
         dot.style.boxShadow = '0 0 8px #00b894';
       } else {
@@ -1036,43 +1080,37 @@
         dot.style.boxShadow = 'none';
       }
     }
-    
+
     function appendChatMessage(role, content) {
       const chatArea = document.querySelector('.chat-area');
       if (!chatArea) return;
-      
-      // 移除之前的quick-actions
       const quickActions = chatArea.querySelector('.quick-actions');
       if (quickActions) quickActions.remove();
-      
       const msgDiv = document.createElement('div');
       msgDiv.className = 'chat-message ' + role;
-      
       const avatarClass = role === 'user' ? 'user-avatar' : 'ai-avatar';
       const avatarText = role === 'user' ? '我' : 'AI';
-      
       msgDiv.innerHTML = `
         <div class="message-avatar ${avatarClass}">${avatarText}</div>
         <div class="message-content">
           <div class="message-bubble" style="${role === 'user' ? 'background:rgba(232,97,58,0.1);color:var(--primary-dark);' : ''}">${formatMarkdown(content)}</div>
           ${role === 'ai' ? `
             <div class="quick-actions">
-              <button class="quick-btn" onclick="copyToClipboard(\`${content.replace(/`/g, '\\`').replace(/\\/g, '\\\\')}\`)">📋 复制</button>
-              <button class="quick-btn" onclick="this.closest('.chat-message').remove(); showToast('已删除', 'info')">🗑️</button>
+              <button class="quick-btn" onclick="copyToClipboard(\`${content.replace(/`/g,'\\`').replace(/\\/g,'\\\\').replace(/\$/g,'\\$')}\`)">📋 复制</button>
+              <button class="quick-btn" onclick="this.closest('.chat-message').remove(); showToast('已删除','info')">🗑️</button>
             </div>` : ''}
         </div>
       `;
-      
       chatArea.appendChild(msgDiv);
       chatArea.scrollTop = chatArea.scrollHeight;
     }
-    
-    // 简单的Markdown格式化
+
     function formatMarkdown(text) {
       if (typeof text !== 'string') return text;
       return text
         .replace(/### (.+)/g, '<h4 style="font-size:14px;font-weight:600;margin:12px 0 8px;color:var(--text-primary);">$1</h4>')
         .replace(/## (.+)/g, '<h3 style="font-size:15px;font-weight:600;margin:16px 0 10px;color:var(--text-primary);">$1</h3>')
+        .replace(/### (.+)/g, '<h4 style="font-size:14px;font-weight:600;margin:12px 0 8px;color:var(--text-primary);">$1</h4>')
         .replace(/\*\*(.+?)\*\*/g, '<strong style="color:var(--text-primary);">$1</strong>')
         .replace(/\*(.+?)\*/g, '<em>$1</em>')
         .replace(/^- (.+)$/gm, '• $1')

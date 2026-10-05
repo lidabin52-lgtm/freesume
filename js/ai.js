@@ -107,7 +107,9 @@ const AI = {
     apiKey: '',
     apiUrl: '',
     model: ''
-// ====== 初始化配置 ======
+  },
+
+  // ====== 初始化配置 ======
   init: function() {
     const saved = Storage.get('ai_config');
     if (saved) {

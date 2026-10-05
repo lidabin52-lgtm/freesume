@@ -14,8 +14,8 @@ const AI_PROVIDERS = [
     logo: '🟢',
     url: 'https://console.groq.com',
     apiUrl: 'https://api.groq.com/openai/v1/chat/completions',
-    defaultModel: 'llama3-8b-8192',
-    models: ['llama3-8b-8192', 'llama3-70b-8192', 'mixtral-8x7b-32768'],
+    defaultModel: 'llama-3.3-70b-versatile',
+    models: ['llama-3.1-8b-instant', 'llama-3.3-70b-versatile', 'meta-llama/llama-4-scout-17b-16e-instruct', 'deepseek-r1-distill-llama-70b', 'qwen/qwen3-32b'],
     note: '免费额度，速度极快（毫秒级响应）'
   },
   {
@@ -107,12 +107,18 @@ const AI = {
     apiKey: '',
     apiUrl: '',
     model: ''
-  },
-
+// ====== 初始化配置 ======
   init: function() {
     const saved = Storage.get('ai_config');
     if (saved) {
       this.config = { ...this.config, ...saved };
+      // 自动修复废弃模型
+      const p = AI_PROVIDERS.find(x => x.id === this.config.provider);
+      if (p && this.config.model && !p.models.includes(this.config.model)) {
+        console.warn(`[FREESUME] 模型 ${this.config.model} 已废弃，自动切换为 ${p.defaultModel}`);
+        this.config.model = p.defaultModel;
+        Storage.set('ai_config', this.config);
+      }
     }
   },
 

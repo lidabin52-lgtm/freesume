@@ -80,24 +80,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
   
-  // 快速操作按钮
-  document.querySelectorAll('.quick-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      showToast('已复制建议到剪贴板', 'success');
-    });
-  });
-  
-  // AI生成按钮
-  document.querySelectorAll('.btn-ai-generate').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const textarea = btn.closest('.form-group')?.querySelector('.form-textarea');
-      if (textarea) {
-        textarea.value = 'AI生成的自我评价内容会在这里显示...\n\n我是一名充满热情的后端开发工程师，具备扎实的Java技术栈和丰富的项目实践经验。善于从系统整体架构思考问题，注重代码质量与可维护性。具备良好的团队协作能力和沟通能力，能够快速学习新技术并应用于实际项目。';
-        showToast('AI已为您生成内容', 'success');
-      }
-    });
-  });
-  
   // 初始化：从URL hash加载视图
   const hash = window.location.hash.substring(1);
   if (hash && document.getElementById('view-' + hash)) {
@@ -1686,6 +1668,8 @@ document.addEventListener('DOMContentLoaded', () => {
 /* =====================================================
    🔧 岗位匹配：生成按钮修复（卡住问题）
    ===================================================== */
+let matchGenTimer = null;
+
 function startGenerateMatch() {
   const progressFill = document.querySelector('.view-matching .progress-fill');
   const hint = document.querySelector('.view-matching .progress-hint');
@@ -1694,6 +1678,7 @@ function startGenerateMatch() {
     return;
   }
 
+  stopGenerateMatch();
   let progress = 0;
   progressFill.style.width = '0%';
   if (hint) hint.textContent = '✨ 正在生成定制简历...';
@@ -1701,11 +1686,12 @@ function startGenerateMatch() {
   const steps = ['分析JD关键词...', '匹配你的技能...', 'AI优化项目描述...', '生成定制简历...', '完成！'];
   let stepIdx = 0;
 
-  const interval = setInterval(() => {
+  matchGenTimer = setInterval(() => {
     progress += Math.random() * 12 + 3;
     if (progress >= 100) {
       progress = 100;
-      clearInterval(interval);
+      clearInterval(matchGenTimer);
+      matchGenTimer = null;
       if (hint) hint.textContent = '✅ 生成完成！';
       showToast('✅ 定制简历生成完成！', 'success');
       return;
@@ -1720,11 +1706,26 @@ function startGenerateMatch() {
   }, 400);
 }
 
-// 给"生成简历"按钮绑定
+function stopGenerateMatch() {
+  if (matchGenTimer) {
+    clearInterval(matchGenTimer);
+    matchGenTimer = null;
+  }
+}
+
+// 给"生成简历/停止生成"按钮绑定
 document.addEventListener('click', (e) => {
-  const btn = e.target.closest('.view-matching .btn-generate, .view-matching [data-action="generate"]');
-  if (btn) {
+  const genBtn = e.target.closest('.view-matching .btn-generate, .view-matching [data-action="generate"]');
+  const stopBtn = e.target.closest('.view-matching [data-action="stop"]');
+  if (genBtn) {
     startGenerateMatch();
+  } else if (stopBtn) {
+    stopGenerateMatch();
+    const fill = document.querySelector('.view-matching .progress-fill');
+    const hint = document.querySelector('.view-matching .progress-hint');
+    if (fill) fill.style.width = '0%';
+    if (hint) hint.textContent = '⏸️ 已停止生成';
+    showToast('⏸️ 已停止生成', 'info');
   }
 });
 

@@ -1693,7 +1693,13 @@ function startGenerateMatch() {
       clearInterval(matchGenTimer);
       matchGenTimer = null;
       if (hint) hint.textContent = '✅ 生成完成！';
+      document.querySelectorAll('.view-matching .progress-step').forEach(s => {
+        s.classList.add('done');
+        s.classList.remove('active');
+      });
       showToast('✅ 定制简历生成完成！', 'success');
+      // 自动切到「生成简历」标签，直接看到结果
+      setTimeout(() => switchMatchTab('resume'), 500);
       return;
     }
     progressFill.style.width = progress + '%';
@@ -1713,10 +1719,24 @@ function stopGenerateMatch() {
   }
 }
 
-// 给"生成简历/停止生成"按钮绑定
+// 匹配页标签切换（匹配度 / 生成简历 / 查看详情）
+function switchMatchTab(tab) {
+  document.querySelectorAll('.panel-tab[data-mtab]').forEach(t => {
+    t.classList.toggle('active', t.dataset.mtab === tab);
+  });
+  document.querySelectorAll('.mtab-panel').forEach(p => {
+    p.classList.toggle('active', p.id === 'mtab-' + tab);
+  });
+}
+
+// 给"生成简历/停止生成/新建匹配/标签切换"按钮绑定
 document.addEventListener('click', (e) => {
+  const tabBtn = e.target.closest('.panel-tab[data-mtab]');
+  if (tabBtn) { switchMatchTab(tabBtn.dataset.mtab); return; }
+
   const genBtn = e.target.closest('.view-matching .btn-generate, .view-matching [data-action="generate"]');
   const stopBtn = e.target.closest('.view-matching [data-action="stop"]');
+  const newBtn = e.target.closest('.view-matching [data-action="new-match"]');
   if (genBtn) {
     startGenerateMatch();
   } else if (stopBtn) {
@@ -1726,6 +1746,14 @@ document.addEventListener('click', (e) => {
     if (fill) fill.style.width = '0%';
     if (hint) hint.textContent = '⏸️ 已停止生成';
     showToast('⏸️ 已停止生成', 'info');
+  } else if (newBtn) {
+    stopGenerateMatch();
+    const fill = document.querySelector('.view-matching .progress-fill');
+    const hint = document.querySelector('.view-matching .progress-hint');
+    if (fill) fill.style.width = '0%';
+    if (hint) hint.textContent = '✨ 已新建匹配任务，点击「一键生成」开始';
+    switchMatchTab('score');
+    showToast('✅ 已新建匹配任务', 'success');
   }
 });
 

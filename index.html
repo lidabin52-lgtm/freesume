@@ -531,16 +531,17 @@
             <div class="jd-header">
               <h3>字节 - Java后端开发</h3>
               <div class="jd-tags">
-                <span class="jd-tag">19975760</span>
-                <span class="jd-tag">201113747@qq.com</span>
+                <span class="jd-tag">19068051907</span>
+                <span class="jd-tag">ldb_888@qq.com</span>
               </div>
             </div>
             <div class="jd-info">
+              <div class="jd-item"><span>姓名</span>李大斌</div>
               <div class="jd-item"><span>性别</span>男</div>
               <div class="jd-item"><span>学历</span>本科</div>
-              <div class="jd-item"><span>学校</span>南昌航空大学</div>
-              <div class="jd-item"><span>专业</span>软件工程</div>
-              <div class="jd-item"><span>电话</span>19975760</div>
+              <div class="jd-item"><span>学校</span>厦门华厦学院</div>
+              <div class="jd-item"><span>专业</span>通信工程</div>
+              <div class="jd-item"><span>电话</span>19068051907</div>
             </div>
             <div class="jd-body">
               <h4>📁 项目经历 (2)</h4>
@@ -562,7 +563,7 @@
         <div class="matching-center">
           <div class="panel-header">
             <span class="panel-title">📋 匹配历史</span>
-            <button class="btn btn-small btn-primary">+ 新建匹配</button>
+            <button class="btn btn-small btn-primary" data-action="new-match">+ 新建匹配</button>
           </div>
 
           <div class="match-history">
@@ -622,77 +623,142 @@
         <!-- 右栏：AI生成的匹配简历 -->
         <div class="matching-right">
           <div class="panel-header">
-            <span class="panel-title">🎯 字节 - 开发</span>
+            <span class="panel-title">🎯 字节 - Java后端开发</span>
             <div class="panel-tabs">
-              <button class="panel-tab active">匹配度 88</button>
-              <button class="panel-tab">生成简历</button>
-              <button class="panel-tab">查看详情</button>
+              <button class="panel-tab active" data-mtab="score">匹配度 88</button>
+              <button class="panel-tab" data-mtab="resume">生成简历</button>
+              <button class="panel-tab" data-mtab="detail">查看详情</button>
             </div>
           </div>
 
           <div class="match-content">
-            <div class="generation-progress">
-              <div class="progress-header">
-                <span>🔄 正在生成简历中...</span>
+
+            <!-- ① 匹配度面板 -->
+            <div class="mtab-panel active" id="mtab-score">
+              <div class="generation-progress">
+                <div class="progress-header">
+                  <span>🔄 正在生成简历中...</span>
+                </div>
+                <div class="progress-steps">
+                  <div class="progress-step done">
+                    <span class="step-icon">✓</span>
+                    <span>分析JD需求</span>
+                  </div>
+                  <div class="progress-step done">
+                    <span class="step-icon">✓</span>
+                    <span>匹配简历内容</span>
+                  </div>
+                  <div class="progress-step done">
+                    <span class="step-icon">✓</span>
+                    <span>重写简历描述</span>
+                  </div>
+                  <div class="progress-step active">
+                    <span class="step-icon">4</span>
+                    <span>生成预览</span>
+                  </div>
+                  <div class="progress-step">
+                    <span class="step-icon">5</span>
+                    <span>完成生成</span>
+                  </div>
+                </div>
+                <div class="progress-bar">
+                  <div class="progress-fill" style="width: 80%"></div>
+                </div>
+                <div class="progress-hint">✨ 正在生成匹配区域简历...</div>
               </div>
-              <div class="progress-steps">
-                <div class="progress-step done">
-                  <span class="step-icon">✓</span>
-                  <span>分析JD需求</span>
+
+              <div class="ai-generated-content">
+                <h4 class="gen-title">📝 针对JD的定制简历建议</h4>
+
+                <div class="gen-section">
+                  <h5 class="gen-section-title">🎯 技能匹配亮点</h5>
+                  <p>字节的核心业务处理高连接、高QPS、低延迟的海量数据。你的简历应重点突出 Spring Boot、Redis、MySQL 及分布式相关经验，与字节后端技术栈高度匹配。</p>
                 </div>
-                <div class="progress-step done">
-                  <span class="step-icon">✓</span>
-                  <span>匹配简历内容</span>
+
+                <div class="gen-section">
+                  <h5 class="gen-section-title">💡 项目描述优化建议</h5>
+                  <p><strong>传统棋牌游戏管理系统</strong> 项目的技术栈（Spring Boot + Redis + MySQL + 高并发优化）非常贴合字节后端要求，建议强化性能优化与分布式能力描述。</p>
                 </div>
-                <div class="progress-step done">
-                  <span class="step-icon">✓</span>
-                  <span>重写简历描述</span>
+
+                <div class="gen-section highlight">
+                  <h5 class="gen-section-title">🔑 关键亮点改写建议</h5>
+                  <div class="suggestion-box">
+                    <p><strong>原描述：</strong> 负责数据库的性能与安全优化，查询效率提升23%。</p>
+                    <p><strong>改写建议：</strong> 主导数据库架构优化，通过 Redis 缓存策略 + MySQL 分库分表，将核心查询接口响应时间从 <strong>200ms 降至 85ms</strong>，查询效率提升 <strong>57.5%</strong>。</p>
+                  </div>
                 </div>
-                <div class="progress-step active">
-                  <span class="step-icon">4</span>
-                  <span>生成预览</span>
-                </div>
-                <div class="progress-step">
-                  <span class="step-icon">5</span>
-                  <span>完成生成</span>
+
+                <div class="gen-section">
+                  <h5 class="gen-section-title">❓ 你还有这些优势可以突出</h5>
+                  <ul class="gen-list">
+                    <li>✅ 完整的 Java 技术栈（Spring Boot + Redis + MySQL）</li>
+                    <li>✅ 独立负责项目，有从设计到交付的完整经验</li>
+                    <li>✅ 对后端架构优化有实际项目经验</li>
+                  </ul>
                 </div>
               </div>
-              <div class="progress-bar">
-                <div class="progress-fill" style="width: 80%"></div>
-              </div>
-              <div class="progress-hint">✨ 正在生成匹配区域简历...</div>
             </div>
 
-            <div class="ai-generated-content">
-              <h4 class="gen-title">📝 针对JD的定制简历建议</h4>
-
-              <div class="gen-section">
-                <h5 class="gen-section-title">🎯 技能匹配亮点</h5>
-                <p>字节的核心业务处理高连接、高QPS、低延迟的海量数据，以抖音为例，用户每秒会产生大量行为数据（点赞、关注、浏览），这些数据需要实时写入和分析。你的简历应该突出你的 Redis、MySQL、分布式相关经验。</p>
-              </div>
-
-              <div class="gen-section">
-                <h5 class="gen-section-title">💡 项目描述优化建议</h5>
-                <p>你提到的 <strong>传统棋牌游戏管理系统</strong> 项目，虽然业务场景不同，但其中的技术栈（Spring Boot + Redis + MySQL + 高并发优化）非常贴合字节的后端技术栈。建议在描述中更突出性能优化和分布式能力。</p>
-              </div>
-
-              <div class="gen-section highlight">
-                <h5 class="gen-section-title">🔑 关键亮点改写建议</h5>
-                <div class="suggestion-box">
-                  <p><strong>原描述：</strong> 负责数据库的性能与安全优化，查询效率提升23%。</p>
-                  <p><strong>改写建议：</strong> 主导数据库架构优化，通过 Redis 缓存策略 + MySQL 分库分表方案，将核心查询接口响应时间从 <strong>200ms 降至 85ms</strong>，查询效率提升 <strong>57.5%</strong>。</p>
+            <!-- ② 生成简历面板 -->
+            <div class="mtab-panel" id="mtab-resume">
+              <div class="gen-resume-tip">✨ 已针对「字节 - Java后端开发」生成定制简历，下方预览。如需保存，请到「简历分析」页点击「📥 导出 PDF」。</div>
+              <div class="jd-preview resume-doc" id="generatedResume">
+                <div class="jd-header">
+                  <h3>李大斌</h3>
+                  <div class="jd-tags">
+                    <span class="jd-tag">Java 软件开发</span>
+                    <span class="jd-tag">19068051907</span>
+                  </div>
+                </div>
+                <div class="jd-info">
+                  <div class="jd-item"><span>邮箱</span>ldb_888@qq.com</div>
+                  <div class="jd-item"><span>学历</span>本科 · 厦门华厦学院</div>
+                  <div class="jd-item"><span>专业</span>通信工程（2022-2028）</div>
+                  <div class="jd-item"><span>地点</span>江西</div>
+                </div>
+                <div class="jd-body">
+                  <h4>💼 项目经历</h4>
+                  <div class="jd-project">
+                    <div class="jd-project-header">
+                      <strong>K203 传统棋牌游戏管理系统（校企合作）</strong>
+                      <span class="jd-project-date">2024-09 ~ 2024-12</span>
+                    </div>
+                    <ul class="jd-project-desc">
+                      <li>主导后端 MAVCT 层架构选型与改造，基于 Spring Boot + Redis 实现高并发数据处理引擎。</li>
+                      <li>负责数据库性能与安全优化，查询效率提升 23%。</li>
+                    </ul>
+                  </div>
+                  <h4>🛠 专业技能</h4>
+                  <ul class="jd-project-desc">
+                    <li>Java · Spring Boot · MySQL · Redis · Python · JavaScript · C++</li>
+                  </ul>
                 </div>
               </div>
+            </div>
 
-              <div class="gen-section">
-                <h5 class="gen-section-title">❓ 你还有这些优势可以突出</h5>
-                <ul class="gen-list">
-                  <li>✅ 完整的 Java 技术栈（Spring Boot + Redis + MySQL + 分布式）</li>
-                  <li>✅ 独立负责项目，有完整的从设计到交付经验</li>
-                  <li>✅ 对后端架构优化有实际项目经验</li>
-                </ul>
+            <!-- ③ 查看详情面板 -->
+            <div class="mtab-panel" id="mtab-detail">
+              <div class="jd-preview">
+                <div class="jd-header">
+                  <h3>职位要求（JD）</h3>
+                </div>
+                <div class="jd-body">
+                  <h4>📌 字节 - Java 后端开发工程师</h4>
+                  <ul class="jd-project-desc">
+                    <li>扎实的 Java 基础，熟悉 JVM、多线程、集合框架</li>
+                    <li>熟悉 Spring Boot / Spring Cloud 微服务开发</li>
+                    <li>熟悉 MySQL、Redis 及常见分布式方案</li>
+                    <li>了解高并发、高可用系统设计，有实战经验优先</li>
+                  </ul>
+                  <h4>⭐ 加分项</h4>
+                  <ul class="jd-project-desc">
+                    <li>有高并发 / 分布式项目落地经验</li>
+                    <li>熟悉消息队列（Kafka / RocketMQ）</li>
+                  </ul>
+                </div>
               </div>
             </div>
+
           </div>
 
           <div class="matching-actions">
